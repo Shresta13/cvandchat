@@ -6,28 +6,32 @@ import { getCurrentUser } from "@/lib/auth"
 import { redirect } from "next/navigation"
 
 export default async function Page() {
-  const user = await getCurrentUser()
+  let user = null
+
+  try {
+    user = await getCurrentUser()
+  } catch (err) {
+    console.error("Dashboard: getCurrentUser failed", err)
+  }
 
   if (!user) {
     redirect("/login")
   }
 
   const sidebarUser = {
-    name: user.name ?? "User",
-    email: user.email ?? "",
+    name:   user!.name  ?? "User",
+    email:  user!.email ?? "",
     avatar: "/avatars/shadcn.jpg",
   }
 
   return (
     <>
       <AppSidebar user={sidebarUser} />
-
       <main className="pt-16">
         <ResumeProvider>
           <ResumeBuilder />
         </ResumeProvider>
       </main>
-
       <ChatButton />
     </>
   )

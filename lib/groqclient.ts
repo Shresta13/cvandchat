@@ -1,8 +1,16 @@
 import { OpenAI } from "openai";
 
-const groqClient = new OpenAI({
-  apiKey: process.env.GROQ_API_KEY!,
-  baseURL: "https://api.groq.com/openai/v1",
-});
+export function getGroqClient() {
+  const apiKey = process.env.GROQ_API_KEY || process.env.OPENAI_API_KEY;
 
-export default groqClient;
+  if (!apiKey) {
+    throw new Error(
+      "Missing API key. Set GROQ_API_KEY (or OPENAI_API_KEY) in .env.local"
+    );
+  }
+
+  return new OpenAI({
+    apiKey,
+    baseURL: "https://api.groq.com/openai/v1",
+  });
+}

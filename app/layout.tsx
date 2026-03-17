@@ -4,7 +4,6 @@ import "./globals.css";
 import { ChatButton } from "@/app/components/chat-button";
 import { ConvexClientProvider } from "@/app/components/ConvesClientProvider";
 
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -26,18 +25,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en"> 
+    <html lang="en">
       <body
+        suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      > 
-     <ConvexClientProvider>
-       {children}
-     </ConvexClientProvider>
-        
-       
-       
-      
-        
+      >
+        <ConvexClientProvider>
+          {children}
+          <ChatButton />
+        </ConvexClientProvider>
       </body>
     </html>
   );

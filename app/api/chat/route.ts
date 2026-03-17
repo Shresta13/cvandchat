@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import groqClient from '@/lib/groqclient';
+import { getGroqClient } from '@/lib/groqclient';
 
 export async function POST(req: Request) {
   try {
@@ -21,6 +21,8 @@ Guidelines:
 4. Keep responses short and chatty, suitable for a small chat window side-panel.`
     };
 
+    const groqClient = getGroqClient();
+
     const completion = await groqClient.chat.completions.create({
       messages: [systemPrompt, ...messages],
       model: "llama-3.3-70b-versatile",
@@ -34,7 +36,10 @@ Guidelines:
   } catch (error) {
     console.error("Error in chat API:", error);
     return NextResponse.json(
-      { error: "Failed to generate response" },
+      {
+        error:
+          error instanceof Error ? error.message : "Failed to generate response",
+      },
       { status: 500 }
     );
   }

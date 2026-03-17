@@ -1,3 +1,4 @@
+
 import Navbar from "@/app/landing/navbar/nav"
 import { SignupForm } from "@/app/components/signup-form"
 import { GalleryVerticalEnd } from "lucide-react"

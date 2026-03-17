@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, FileText } from 'lucide-react';
+import { ChevronLeft, ChevronRight, FileText, Eye } from 'lucide-react';
 import Sidebar from './Sidebar';
 import ResumePreview from './ResumePreview';
 import PersonalInfoStep from './steps/PersonalInfoStep';
@@ -13,8 +13,8 @@ import CertificatesStep from './steps/CertificatesStep';
 import { useResume } from './context/ResumeContext';
 
 const brand = {
-  primary: '#00273d',
-  primaryDark: '#00273d',
+  primary: '#00273D',
+  primaryDark: '#001D2E',
 };
 
 const steps = [
@@ -29,9 +29,9 @@ const steps = [
 type View = 'form' | 'preview';
 
 export default function ResumeBuilder() {
-  const [currentStep, setCurrentStep]   = useState(1);
-  const [isHydrated, setIsHydrated]     = useState(false);
-  const [mobileView, setMobileView]     = useState<View>('form');
+  const [currentStep, setCurrentStep] = useState(1);
+  const [isHydrated, setIsHydrated]   = useState(false);
+  const [mobileView, setMobileView]   = useState<View>('form');
   const { resumeData } = useResume();
 
   useEffect(() => { setIsHydrated(true); }, []);
@@ -72,8 +72,8 @@ export default function ResumeBuilder() {
     >
       <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap');`}</style>
 
-      {/* ── Mobile top bar ── */}
-      <div className="flex items-center justify-between border-b border-gray-200 bg-white px-4 py-3 lg:hidden">
+      {/* ── Top bar — visible on ALL screens ── */}
+      <div className="flex items-center justify-between border-b border-gray-200 bg-white px-4 py-3">
         <div className="min-w-0">
           <p className="text-xs font-semibold uppercase tracking-widest text-gray-400">
             Step {currentStep} / {steps.length}
@@ -83,7 +83,7 @@ export default function ResumeBuilder() {
           </p>
         </div>
 
-        {/* Form / Preview toggle */}
+        {/* Form / Preview toggle — visible on ALL screens */}
         <div className="flex rounded-lg border border-gray-200 bg-gray-50 p-0.5">
           <button
             onClick={() => setMobileView('form')}
@@ -105,7 +105,7 @@ export default function ResumeBuilder() {
                 : { color: '#6b7280' }
             }
           >
-            <FileText size={12} />
+            <Eye size={12} />
             Preview
           </button>
         </div>
@@ -114,15 +114,17 @@ export default function ResumeBuilder() {
       {/* ── Main layout ── */}
       <div className="flex flex-1 overflow-hidden">
 
-        {/* Sidebar — hidden on mobile */}
+        {/* Sidebar — hidden on mobile, visible on lg+ */}
         <div className="hidden lg:block">
           <Sidebar currentStep={currentStep} steps={steps} />
         </div>
 
         {/* Form panel */}
         <div
-          className={`flex flex-col lg:flex-1 lg:max-w-[50%] ${
-            mobileView === 'preview' ? 'hidden lg:flex' : 'flex flex-1'
+          className={`flex flex-col ${
+            mobileView === 'preview'
+              ? 'hidden'                          // hidden when preview active
+              : 'flex flex-1 lg:flex-1 lg:max-w-[50%]' // show on form view
           }`}
         >
           {/* Scrollable form area */}
@@ -144,18 +146,18 @@ export default function ResumeBuilder() {
                 Previous
               </button>
 
-              {/* Step indicator */}
+              {/* Step dots */}
               <div className="flex items-center gap-1">
                 {steps.map((s) => (
                   <div
                     key={s.number}
-                    className="h-1.5 w-1.5 rounded-full transition-all"
+                    className="h-1.5 rounded-full transition-all duration-300"
                     style={{
                       backgroundColor:
                         s.number === currentStep
                           ? brand.primary
                           : s.number < currentStep
-                          ? '#86efac'
+                          ? '#4a7a9b'
                           : '#e5e7eb',
                       width: s.number === currentStep ? '20px' : '6px',
                     }}
@@ -190,10 +192,12 @@ export default function ResumeBuilder() {
           </div>
         </div>
 
-        {/* Preview panel */}
+        {/* ✅ Preview panel — always visible on lg+, toggle on mobile/tablet */}
         <div
-          className={`flex-1 overflow-hidden border-l border-gray-200 lg:flex ${
-            mobileView === 'preview' ? 'flex' : 'hidden'
+          className={`overflow-hidden border-l border-gray-200 ${
+            mobileView === 'preview'
+              ? 'flex flex-1'           // full width when preview toggled
+              : 'hidden lg:flex lg:flex-1' // hidden on mobile form view, always show on lg+
           }`}
         >
           <ResumePreview />

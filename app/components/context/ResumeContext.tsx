@@ -14,7 +14,8 @@ import { useQuery, useMutation } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
 import type { ResumeData } from '../types/resume';
 
-const STORAGE_KEY = 'cvgenerator_resume_data';
+// ✅ No fixed key — key is per user
+const getStorageKey = (userId: string) => `cvgenerator_resume_${userId}`;
 
 const initialResumeData: ResumeData = {
   personalInfo: {
@@ -56,7 +57,7 @@ export function ResumeProvider({ children }: { children: ReactNode }) {
   const [userId, setUserId] = useState<string | null>(null);
   const isInitialised = useRef(false);
 
-  // ✅ Get real user ID from auth cookie via API
+  // ✅ Get real user ID from auth
   useEffect(() => {
     fetch('/api/auth/me')
       .then((r) => r.json())
@@ -70,35 +71,48 @@ export function ResumeProvider({ children }: { children: ReactNode }) {
   const saveResumeMutation = useMutation(api.resumes.saveResume);
   const deleteResumeMutation = useMutation(api.resumes.deleteResume);
 
-  const [resumeData, setResumeData] = useState<ResumeData>(() => {
-    if (typeof window === 'undefined') return initialResumeData;
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      return saved ? JSON.parse(saved) : initialResumeData;
-    } catch {
-      return initialResumeData;
-    }
-  });
-
+  // ✅ Start with blank data — never load from localStorage before knowing who the user is
+  const [resumeData, setResumeData] = useState<ResumeData>(initialResumeData);
   const [isSyncing, setIsSyncing] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
-  // ✅ Mirror every change to localStorage
+  // ✅ Once userId is known, load from their specific localStorage key
   useEffect(() => {
+    if (!userId) return;
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(resumeData));
-    } catch {}
-  }, [resumeData]);
+      const saved = localStorage.getItem(getStorageKey(userId));
+      if (saved) {
+        setResumeData(JSON.parse(saved));
+      }
+    } catch {
+      // ignore
+    }
+  }, [userId]);
 
-  // ✅ Hydrate from Convex once when query resolves
+  // ✅ Save to user-specific localStorage key on every change
+  useEffect(() => {
+    if (!userId) return;
+    try {
+      localStorage.setItem(getStorageKey(userId), JSON.stringify(resumeData));
+    } catch {
+      // storage full or unavailable
+    }
+  }, [resumeData, userId]);
+
+  // ✅ Hydrate from Convex once — overrides localStorage with cloud data
   useEffect(() => {
     if (!userId) return;
     if (savedResume === undefined) return;
     if (isInitialised.current) return;
     isInitialised.current = true;
 
-    if (!savedResume) return;
+    if (!savedResume) {
+      // ✅ New user — clear any old localStorage and start fresh
+      setResumeData(initialResumeData);
+      return;
+    }
 
+    // ✅ Existing user — load their Convex data
     setResumeData({
       personalInfo: {
         fullName: savedResume.fullName  ?? '',
@@ -204,11 +218,12 @@ export function ResumeProvider({ children }: { children: ReactNode }) {
     if (userId) {
       try {
         await deleteResumeMutation({ userId });
+        // ✅ Also clear user-specific localStorage
+        localStorage.removeItem(getStorageKey(userId));
       } catch (err) {
         console.error('[ResumeContext] Convex delete failed:', err);
       }
     }
-    localStorage.removeItem(STORAGE_KEY);
     setResumeData(initialResumeData);
   }, [userId, deleteResumeMutation]);
 

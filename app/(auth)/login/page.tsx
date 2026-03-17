@@ -1,7 +1,8 @@
+
+import Navbar from "@/app/landing/navbar/nav"
+import { LoginForm } from "@/app/components/login-form"
 import { GalleryVerticalEnd } from "lucide-react"
 
-import { LoginForm } from "@/app/components/login-form"
-import Navbar from "@/app/landing/navbar/nav"
 
 export default function LoginPage() {
   return (
