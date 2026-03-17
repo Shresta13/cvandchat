@@ -1,0 +1,8 @@
+{
+  "messages": [],
+  "assistant": {
+    "name": "Task Assistant",
+    "status": "Online",
+    "avatar": "https://api.dicebear.com/7.x/bottts/svg?seed=assistant"
+  }
+}
