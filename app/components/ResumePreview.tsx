@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useResume } from './context/ResumeContext';
 import ClassicTemplate from './templates/Classic';
 import ModernTemplate from './templates/Modern';
@@ -22,12 +22,141 @@ import {
 const templates = [
   { id: 'classic',      name: 'Classic',      component: ClassicTemplate      },
   { id: '2',            name: 'Modern',        component: ModernTemplate       },
-  { id: 'latex',        name: 'LaTeX',         component: LatexTemplate        },
+  { id: 'latex',        name: 'Academic',      component: LatexTemplate        },
   { id: 'twocolumn',    name: 'Two Column',    component: TwoColumnTemplate    },
   { id: 'elegant',      name: 'Elegant',       component: ElegantTemplate      },
   { id: 'professional', name: 'Professional',  component: ProfessionalTemplate },
-  { id: 'dark',         name: 'Dark',          component: DarkSidebarTemplate  },
+  { id: 'dark',         name: 'Dark Sidebar',  component: DarkSidebarTemplate  },
 ];
+
+function TemplateHoverPreview({
+  template,
+  resumeData,
+  buttonRef,
+}: {
+  template: typeof templates[0];
+  resumeData: any;
+  buttonRef: React.RefObject<HTMLButtonElement>;
+}) {
+  const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!buttonRef.current) return;
+    const rect = buttonRef.current.getBoundingClientRect();
+    const previewW = 280;
+    const previewH = 380;
+    const padding  = 8;
+
+    let left = rect.left + rect.width / 2 - previewW / 2;
+    let top  = rect.bottom + padding;
+
+    // keep within viewport horizontally
+    if (left < padding) left = padding;
+    if (left + previewW > window.innerWidth - padding)
+      left = window.innerWidth - previewW - padding;
+
+    // flip above if not enough room below
+    if (top + previewH > window.innerHeight - padding)
+      top = rect.top - previewH - padding;
+
+    setPos({ top, left });
+  }, [buttonRef]);
+
+  const PreviewComponent = template.component;
+
+  if (!pos) return null;
+
+  return (
+    <div
+      ref={previewRef}
+      className="fixed z-50 pointer-events-none"
+      style={{ top: pos.top, left: pos.left, width: 280 }}
+    >
+      {/* Arrow */}
+      <div
+        className="absolute -top-2 left-1/2 -translate-x-1/2 w-0 h-0"
+        style={{
+          borderLeft: '8px solid transparent',
+          borderRight: '8px solid transparent',
+          borderBottom: '8px solid white',
+          filter: 'drop-shadow(0 -1px 1px rgba(0,0,0,0.1))',
+        }}
+      />
+
+      {/* Card */}
+      <div className="rounded-xl overflow-hidden shadow-2xl border border-gray-200 bg-white">
+        {/* Label */}
+        <div
+          className="px-3 py-2 text-xs font-semibold text-white text-center"
+          style={{ backgroundColor: '#00273D' }}
+        >
+          {template.name}
+        </div>
+
+        {/* Scaled resume preview */}
+        <div
+          className="overflow-hidden bg-white"
+          style={{ height: 360 }}
+        >
+          <div
+            className="origin-top-left"
+            style={{
+              transform: 'scale(0.29)',
+              width: `${100 / 0.29}%`,
+              transformOrigin: 'top left',
+              pointerEvents: 'none',
+            }}
+          >
+            <PreviewComponent data={resumeData} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TemplateButton({
+  template,
+  isSelected,
+  resumeData,
+  onClick,
+}: {
+  template: typeof templates[0];
+  isSelected: boolean;
+  resumeData: any;
+  onClick: () => void;
+}) {
+  const [hovered, setHovered] = useState(false);
+  const btnRef = useRef<HTMLButtonElement>(null);
+
+  return (
+    <>
+      <button
+        ref={btnRef}
+        onClick={onClick}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        className={`px-3 py-1.5 text-sm rounded-lg font-medium transition-colors ${
+          isSelected
+            ? 'text-white'
+            : 'bg-white text-gray-700 hover:bg-gray-50'
+        }`}
+        style={isSelected ? { backgroundColor: '#00273D' } : {}}
+      >
+        {template.name}
+      </button>
+
+      {hovered && (
+        <TemplateHoverPreview
+          template={template}
+          resumeData={resumeData}
+          buttonRef={btnRef}
+        />
+      )}
+    </>
+  );
+}
 
 export default function ResumePreview() {
   const { resumeData, updateTemplate } = useResume();
@@ -66,23 +195,14 @@ export default function ResumePreview() {
           <div>
             <h2 className="text-base font-bold text-gray-800 mb-2">Preview</h2>
             <div className="flex gap-1.5 flex-wrap">
-              {templates.map((template) => (
-                <button
+              {isHydrated && templates.map((template) => (
+                <TemplateButton
                   key={template.id}
+                  template={template}
+                  isSelected={selectedId === template.id}
+                  resumeData={resumeData}
                   onClick={() => updateTemplate(template.id)}
-                  className={`px-3 py-1.5 text-xs rounded-lg font-medium transition-colors ${
-                    selectedId === template.id
-                      ? 'text-white'
-                      : 'bg-white text-gray-700 hover:bg-gray-50'
-                  }`}
-                  style={
-                    selectedId === template.id
-                      ? { backgroundColor: '#00273D' }
-                      : {}
-                  }
-                >
-                  {template.name}
-                </button>
+                />
               ))}
             </div>
           </div>
@@ -115,7 +235,7 @@ export default function ResumePreview() {
           </button>
         </div>
 
-        {/* Resume preview — responsive scaling */}
+        {/* Resume preview */}
         <div className="overflow-hidden rounded-sm shadow-xl">
           <div
             className="origin-top-left"
@@ -127,7 +247,6 @@ export default function ResumePreview() {
             {isHydrated && <TemplateComponent data={resumeData} />}
           </div>
         </div>
-
 
       </div>
     </div>
