@@ -34,13 +34,11 @@ export interface Experience {
 export interface Skill {
   id: string;
   name: string;
-  level: string;
 }
 
 export interface Language {
   id: string;
   name: string;
-  level: string;
 }
 
 export interface Certificate {
@@ -51,6 +49,24 @@ export interface Certificate {
   credentialId?: string; 
 }
 
+export interface Project {
+  id: string;
+  name: string;
+  description: string;
+  githubUrl: string;
+}
+
+export interface Reference {
+  id: string;
+  name: string;
+  position: string;
+  company: string;
+  email: string;
+  phone: string;
+  relationship: string;
+  linkedin?: string;
+}
+
 export interface ResumeData {
   id?: string;
   personalInfo: PersonalInfo;
@@ -59,5 +75,7 @@ export interface ResumeData {
   skills: Skill[];
   languages: Language[];
   certificates: Certificate[];
+  projects: Project[];
+  references: Reference[];
   selectedTemplate: string;
 }

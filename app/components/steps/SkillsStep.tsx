@@ -31,7 +31,7 @@ export default function SkillsStep() {
     if (!trimmed) return;
     updateSkillsList([
       ...skillsList,
-      { id: Date.now().toString(), name: toTitleCase(trimmed), level: 'intermediate' },
+      { id: Date.now().toString(), name: toTitleCase(trimmed) },
     ]);
     setInputValue('');
   };

@@ -27,7 +27,7 @@ export default function LanguageStep() {
   const addLanguage = () => {
     updateLanguageList([
       ...languageList,
-      { id: Date.now().toString(), name: '', level: 'conversational' },
+      { id: Date.now().toString(), name: '' },
     ]);
   };
 

@@ -28,6 +28,8 @@ export const saveResume = mutation({
     languages:        v.string(),
     certificates:     v.string(),
     selectedTemplate: v.string(),
+    projects:         v.optional(v.string()),  // ✅ added
+    references:       v.optional(v.string()),  // ✅ added
   },
   handler: async (ctx, args) => {
     const existing = await ctx.db

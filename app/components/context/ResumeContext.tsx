@@ -33,6 +33,8 @@ const initialResumeData: ResumeData = {
   skills: [],
   languages: [],
   certificates: [],
+  projects: [],
+  references: [],
   selectedTemplate: 'classic',
 };
 
@@ -46,6 +48,8 @@ interface ResumeContextType {
   updateSkills: (skills: ResumeData['skills']) => void;
   updateLanguages: (languages: ResumeData['languages']) => void;
   updateCertificates: (certificates: ResumeData['certificates']) => void;
+  updateProjects: (projects: ResumeData['projects']) => void;
+  updateReferences: (references: ResumeData['references']) => void;
   updateTemplate: (template: string) => void;
   clearResume: () => void;
 }
@@ -122,13 +126,14 @@ export function ResumeProvider({ children }: { children: ReactNode }) {
         linkedin: savedResume.linkedin  ?? '',
         github:   savedResume.github    ?? '',
         summary:  savedResume.summary   ?? '',
-        title:    savedResume.jobTitle  ?? '',
       },
       education:        JSON.parse(savedResume.education    || '[]'),
       experience:       JSON.parse(savedResume.experience   || '[]'),
       skills:           JSON.parse(savedResume.skills       || '[]'),
       languages:        JSON.parse(savedResume.languages    || '[]'),
       certificates:     JSON.parse(savedResume.certificates || '[]'),
+      projects:         JSON.parse(savedResume.projects     || '[]'),
+      references:       JSON.parse(savedResume.references   || '[]'),
       selectedTemplate: savedResume.selectedTemplate ?? 'classic',
     });
   }, [savedResume, userId]);
@@ -156,6 +161,8 @@ export function ResumeProvider({ children }: { children: ReactNode }) {
           skills:           JSON.stringify(resumeData.skills),
           languages:        JSON.stringify(resumeData.languages),
           certificates:     JSON.stringify(resumeData.certificates),
+          projects:         JSON.stringify(resumeData.projects),
+          references:       JSON.stringify(resumeData.references),
           selectedTemplate: resumeData.selectedTemplate,
         });
         setLastSaved(new Date());
@@ -208,6 +215,18 @@ export function ResumeProvider({ children }: { children: ReactNode }) {
     []
   );
 
+  const updateProjects = useCallback(
+    (projects: ResumeData['projects']) =>
+      setResumeData((prev) => ({ ...prev, projects })),
+    []
+  );
+
+  const updateReferences = useCallback(
+    (references: ResumeData['references']) =>
+      setResumeData((prev) => ({ ...prev, references })),
+    []
+  );
+
   const updateTemplate = useCallback(
     (selectedTemplate: string) =>
       setResumeData((prev) => ({ ...prev, selectedTemplate })),
@@ -238,6 +257,8 @@ export function ResumeProvider({ children }: { children: ReactNode }) {
       updateSkills,
       updateLanguages,
       updateCertificates,
+      updateProjects,
+      updateReferences,
       updateTemplate,
       clearResume,
     }),
@@ -251,6 +272,8 @@ export function ResumeProvider({ children }: { children: ReactNode }) {
       updateSkills,
       updateLanguages,
       updateCertificates,
+      updateProjects,
+      updateReferences,
       updateTemplate,
       clearResume,
     ]
@@ -275,4 +298,6 @@ export const useExperience       = () => useResume().resumeData.experience;
 export const useSkills           = () => useResume().resumeData.skills;
 export const useLanguages        = () => useResume().resumeData.languages;
 export const useCertificates     = () => useResume().resumeData.certificates;
+export const useProjects         = () => useResume().resumeData.projects;
+export const useReferences       = () => useResume().resumeData.references;
 export const useSelectedTemplate = () => useResume().resumeData.selectedTemplate;

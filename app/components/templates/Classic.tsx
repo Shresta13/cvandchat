@@ -1,4 +1,4 @@
-import { Mail, Phone, MapPin, Linkedin, Github } from 'lucide-react';
+import { Mail, Phone, MapPin, Linkedin, Github, Link as LinkIcon } from 'lucide-react';
 import type { ResumeData } from '../types/resume';
 
 interface ClassicTemplateProps {
@@ -213,6 +213,65 @@ export default function ClassicTemplate({ data }: ClassicTemplateProps) {
                     <span className="text-gray-400">· ID: {cert.credentialId}</span>
                   )}
                 </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Projects */}
+      {data.projects.length > 0 && (
+        <div className="mb-5">
+          <h2 className="text-sm font-bold text-gray-800 mb-3 uppercase tracking-widest border-b border-gray-300 pb-1">
+            Projects
+          </h2>
+          <div className="space-y-3">
+            {data.projects.map((project) => (
+              <div key={project.id}>
+                <div className="flex flex-wrap justify-between items-start gap-1 mb-0.5">
+                  <h3 className="font-bold text-gray-900 text-xs">{project.name}</h3>
+                  {project.githubUrl && (
+                    <a
+                      href={toSafeUrl(project.githubUrl)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-gray-500 hover:text-gray-900 inline-flex items-center gap-1"
+                    >
+                      <LinkIcon size={11} />
+                      {toDisplayUrl(project.githubUrl)}
+                    </a>
+                  )}
+                </div>
+                {project.description && (
+                  <div
+                    className="text-gray-600 text-xs leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mt-1 [&_li]:mt-0.5 [&_strong]:font-bold [&_em]:italic"
+                    dangerouslySetInnerHTML={{ __html: project.description }}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* References */}
+      {data.references.length > 0 && (
+        <div className="mb-5">
+          <h2 className="text-sm font-bold text-gray-800 mb-3 uppercase tracking-widest border-b border-gray-300 pb-1">
+            References
+          </h2>
+          <div className="space-y-2">
+            {data.references.map((reference) => (
+              <div key={reference.id} className="text-xs text-gray-600">
+                <p className="font-semibold text-gray-900">{reference.name}</p>
+                <p>
+                  {reference.position}
+                  {reference.company ? `, ${reference.company}` : ''}
+                </p>
+                <p>
+                  {[reference.email, reference.phone].filter(Boolean).join(' | ')}
+                  {reference.relationship ? ` | ${reference.relationship}` : ''}
+                </p>
               </div>
             ))}
           </div>

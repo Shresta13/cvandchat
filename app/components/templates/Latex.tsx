@@ -243,6 +243,64 @@ export default function LatexTemplate({ data }: LatexTemplateProps) {
           </div>
         </div>
       )}
+
+      {/* Projects */}
+      {data.projects.length > 0 && (
+        <div className="mb-4">
+          <SectionHeader title="Projects" />
+          <div className="flex flex-col gap-3">
+            {data.projects.map((project) => (
+              <div key={project.id}>
+                <div className="flex flex-wrap justify-between items-baseline gap-1">
+                  <span style={{ fontWeight: 'bold', fontSize: '11px' }}>
+                    {project.name}
+                  </span>
+                  {project.githubUrl && (
+                    <a
+                      href={toSafeUrl(project.githubUrl)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ fontSize: '9px', color: '#00008B', textDecoration: 'underline' }}
+                      className="shrink-0"
+                    >
+                      {toDisplayUrl(project.githubUrl)}
+                    </a>
+                  )}
+                </div>
+                {project.description && (
+                  <div
+                    className="mt-1 leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mt-1 [&_li]:mt-0.5 [&_strong]:font-bold [&_em]:italic"
+                    style={{ fontSize: '9px', color: '#222' }}
+                    dangerouslySetInnerHTML={{ __html: project.description }}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* References */}
+      {data.references.length > 0 && (
+        <div className="mb-4">
+          <SectionHeader title="References" />
+          <div className="flex flex-col gap-2">
+            {data.references.map((reference) => (
+              <div key={reference.id} style={{ fontSize: '9px' }}>
+                <div style={{ fontWeight: 'bold', fontSize: '10px' }}>{reference.name}</div>
+                <div style={{ fontStyle: 'italic', color: '#444' }}>
+                  {reference.position}
+                  {reference.company ? `, ${reference.company}` : ''}
+                </div>
+                <div style={{ color: '#666' }}>
+                  {[reference.email, reference.phone].filter(Boolean).join(' | ')}
+                  {reference.relationship ? ` | ${reference.relationship}` : ''}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

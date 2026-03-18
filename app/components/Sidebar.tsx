@@ -1,4 +1,5 @@
-import { Check } from "lucide-react";
+import { Check, AlertCircle } from "lucide-react";
+import { useResume } from "./context/ResumeContext";
 
 interface Step {
   number: number;
@@ -11,6 +12,42 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ currentStep, steps }: SidebarProps) {
+  const { resumeData } = useResume();
+
+  // ✅ Check if each step has actual data filled
+  const isStepFilled = (stepNumber: number): boolean => {
+    switch (stepNumber) {
+      case 1:
+        return !!(
+          resumeData.personalInfo.fullName &&
+          resumeData.personalInfo.email &&
+          resumeData.personalInfo.phone &&
+          resumeData.personalInfo.location
+        );
+      case 2:
+        return (
+          resumeData.education.length > 0 &&
+          resumeData.education.every((e) => e.institution && e.degree)
+        );
+      case 3:
+        return (
+          resumeData.experience.length > 0 &&
+          resumeData.experience.every((e) => e.company && e.position)
+        );
+      case 4:
+        return resumeData.skills.length > 0;
+      case 5:
+        return resumeData.languages.length > 0;
+      case 6:
+        return (
+          resumeData.certificates.length > 0 &&
+          resumeData.certificates.every((c) => c.name && c.issuer)
+        );
+      default:
+        return false;
+    }
+  };
+
   return (
     <div className="hidden w-56 shrink-0 flex-col justify-between border-r border-gray-100 bg-white p-5 shadow-sm lg:flex">
       <div>
@@ -20,23 +57,35 @@ export default function Sidebar({ currentStep, steps }: SidebarProps) {
 
         <div className="space-y-5">
           {steps.map((step, index) => {
-            const isCompleted = currentStep > step.number;
-            const isCurrent = currentStep === step.number;
+            const passed      = currentStep > step.number;
+            const filled      = isStepFilled(step.number);
+            const isCompleted = passed && filled;   // ✅ green tick only if filled
+            const isSkipped   = passed && !filled;  // ⚠️ orange if skipped empty
+            const isCurrent   = currentStep === step.number;
 
             return (
               <div key={step.number} className="relative group">
                 <div className="flex items-center">
+
                   {/* Circle */}
                   <div
                     className={`
                       relative z-10 w-9 h-9 rounded-full flex items-center justify-center text-xs font-semibold
                       transition-all duration-300 shrink-0
-                      ${isCompleted ? "bg-[#00273D] text-white shadow-sm shadow-[#B7CBD7]" : ""}
-                      ${isCurrent ? "bg-[#00273D] text-white shadow-sm scale-105" : ""}
-                      ${!isCompleted && !isCurrent ? "bg-gray-200 text-gray-600 group-hover:bg-gray-300" : ""}
+                      ${isCompleted ? "bg-green-700 text-white shadow-sm shadow-green-200" : ""}
+                      ${isSkipped   ? "bg-orange-100 text-orange-500 border border-orange-300" : ""}
+                      ${isCurrent   ? "text-white shadow-sm scale-105" : ""}
+                      ${!isCompleted && !isSkipped && !isCurrent ? "bg-gray-200 text-gray-600 group-hover:bg-gray-300" : ""}
                     `}
+                    style={isCurrent ? { backgroundColor: '#00273D' } : {}}
                   >
-                    {isCompleted ? <Check size={14} /> : step.number}
+                    {isCompleted ? (
+                      <Check size={14} />
+                    ) : isSkipped ? (
+                      <AlertCircle size={14} />
+                    ) : (
+                      step.number
+                    )}
                   </div>
 
                   {/* Title */}
@@ -44,7 +93,8 @@ export default function Sidebar({ currentStep, steps }: SidebarProps) {
                     className={`
                       ml-3 text-sm font-medium transition-colors duration-200 truncate
                       ${isCompleted ? "text-gray-800" : ""}
-                      ${!isCompleted && !isCurrent ? "text-gray-500" : ""}
+                      ${isSkipped   ? "text-orange-500" : ""}
+                      ${!isCompleted && !isSkipped && !isCurrent ? "text-gray-500" : ""}
                     `}
                     style={isCurrent ? { color: '#00273D' } : {}}
                   >
@@ -57,7 +107,7 @@ export default function Sidebar({ currentStep, steps }: SidebarProps) {
                   <div
                     className={`
                       absolute left-[17px] top-10 w-[2px] h-8 transition-colors duration-300
-                      ${isCompleted ? "bg-[#00273D]" : "bg-gray-200"}
+                      ${isCompleted ? "bg-green-600" : "bg-gray-200"}
                     `}
                   />
                 )}
@@ -65,19 +115,6 @@ export default function Sidebar({ currentStep, steps }: SidebarProps) {
             );
           })}
         </div>
-      </div>
-
-      {/* Pro Tip */}
-      <div
-        className="mt-6 p-3 rounded-xl border"
-        style={{ backgroundColor: '#EAF1F5', borderColor: '#B7CBD7' }}
-      >
-        <p className="text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: '#00273D' }}>
-          Pro Tip
-        </p>
-        <p className="text-xs text-gray-700 leading-relaxed">
-          Keep your resume to one page. Recruiters spend only 6–8 seconds reviewing it.
-        </p>
       </div>
     </div>
   );

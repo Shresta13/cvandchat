@@ -8,6 +8,8 @@ import PersonalInfoStep from './steps/PersonalInfoStep';
 import EducationStep from './steps/EducationStep';
 import ExperienceStep from './steps/ExperienceStep';
 import SkillsStep from './steps/SkillsStep';
+import ProjectsStep from './steps/Projects';
+import ReferencesStep from './steps/Reference';
 import LanguageStep from './steps/Language';
 import CertificatesStep from './steps/CertificatesStep';
 import { useResume } from './context/ResumeContext';
@@ -24,6 +26,8 @@ const steps = [
   { number: 4, title: 'Skills',         component: SkillsStep         },
   { number: 5, title: 'Languages',      component: LanguageStep       },
   { number: 6, title: 'Certificates',   component: CertificatesStep   },
+  { number: 7, title: 'Projects',       component: ProjectsStep       },
+  { number: 8, title: 'References',     component: ReferencesStep     },
 ];
 
 type View = 'form' | 'preview';

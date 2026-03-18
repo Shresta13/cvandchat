@@ -242,6 +242,64 @@ export default function ModernTemplate({ data }: ModernTemplateProps) {
           </section>
         )}
 
+        {/* Projects */}
+        {data.projects.length > 0 && (
+          <section className="mb-7">
+            <h2 className="text-xl sm:text-xl font-bold text-gray-900 mb-2 pb-1.5 border-b-2 border-gray-800 uppercase tracking-wide">
+              Projects
+            </h2>
+            <div className="space-y-4 mt-3">
+              {data.projects.map((project) => (
+                <div key={project.id}>
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <h3 className="text-base sm:text-lg font-bold text-gray-900">{project.name}</h3>
+                    {project.githubUrl && (
+                      <a
+                        href={toSafeUrl(project.githubUrl)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-gray-500 hover:text-gray-900"
+                      >
+                        {toDisplayUrl(project.githubUrl)}
+                      </a>
+                    )}
+                  </div>
+                  {project.description && (
+                    <div
+                      className="text-gray-600 text-sm leading-relaxed mt-1.5 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mt-1 [&_li]:mt-0.5 [&_strong]:font-bold [&_em]:italic"
+                      dangerouslySetInnerHTML={{ __html: project.description }}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* References */}
+        {data.references.length > 0 && (
+          <section className="mb-7">
+            <h2 className="text-xl sm:text-xl font-bold text-gray-900 mb-2 pb-1.5 border-b-2 border-gray-800 uppercase tracking-wide">
+              References
+            </h2>
+            <div className="space-y-3 mt-3">
+              {data.references.map((reference) => (
+                <div key={reference.id}>
+                  <h4 className="text-sm sm:text-base font-bold text-gray-900">{reference.name}</h4>
+                  <p className="text-xs sm:text-sm text-gray-500">
+                    {reference.position}
+                    {reference.company ? `, ${reference.company}` : ''}
+                  </p>
+                  <p className="text-xs text-gray-400">
+                    {[reference.email, reference.phone].filter(Boolean).join(' | ')}
+                    {reference.relationship ? ` | ${reference.relationship}` : ''}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
       </div>
     </div>
   );
