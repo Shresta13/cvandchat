@@ -36,7 +36,7 @@ function TemplateHoverPreview({
 }: {
   template: typeof templates[0];
   resumeData: any;
-  buttonRef: React.RefObject<HTMLButtonElement>;
+  buttonRef: React.RefObject<HTMLButtonElement | null>;
 }) {
   const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
   const previewRef = useRef<HTMLDivElement>(null);

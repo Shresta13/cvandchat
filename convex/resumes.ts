@@ -21,7 +21,6 @@ export const saveResume = mutation({
     linkedin:         v.string(),
     github:           v.string(),
     summary:          v.string(),
-    jobTitle:         v.string(),
     education:        v.string(),
     experience:       v.string(),
     skills:           v.string(),

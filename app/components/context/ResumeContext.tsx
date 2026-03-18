@@ -155,7 +155,6 @@ export function ResumeProvider({ children }: { children: ReactNode }) {
           linkedin:         p.linkedin,
           github:           p.github,
           summary:          p.summary,
-          jobTitle:         p.title ?? '',
           education:        JSON.stringify(resumeData.education),
           experience:       JSON.stringify(resumeData.experience),
           skills:           JSON.stringify(resumeData.skills),
