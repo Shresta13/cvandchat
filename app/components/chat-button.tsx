@@ -1,43 +1,34 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Button } from "@/app/components/ui/button"
-import { Input } from "@/app/components/ui/input"
 import { ScrollArea } from "@/app/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@/app/components/ui/avatar"
 import { Card, CardContent, CardFooter, CardHeader } from "@/app/components/ui/card"
-import { MessageCircle, Send, X, Minus } from "lucide-react"
+import { MessageCircle, Send, X, Minus, Sparkles } from "lucide-react"
 import messagesData from "@/app/chatbox/messages.json"
 
-const brand = {
-  primary:     '#00273D',
-  primaryDark: '#001D2E',
-  light:       '#EAF1F5',
-  border:      '#e5e7eb',
+type Message = {
+  id: number
+  sender: string
+  text: string
+  timestamp: string
+  avatar: string
 }
 
-type Message = {
-  id: number;
-  sender: string;
-  text: string;
-  timestamp: string;
-  avatar: string;
-};
-
 export function ChatButton() {
-  const [isOpen,       setIsOpen]       = useState(false)
-  const [isMinimized,  setIsMinimized]  = useState(false)
-  const [messages,     setMessages]     = useState<Message[]>([
+  const [isOpen,      setIsOpen]      = useState(false)
+  const [isMinimized, setIsMinimized] = useState(false)
+  const [messages,    setMessages]    = useState<Message[]>([
     {
       id: 1,
-      sender: 'assistant',
-      text: 'Hello! I am your assistant. How can I help you today?',
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      sender: "assistant",
+      text: "Hello! I'm your assistant. How can I help you today?",
+      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       avatar: messagesData.assistant.avatar,
-    }
+    },
   ])
-  const [inputValue,   setInputValue]   = useState('')
-  const [isLoading,    setIsLoading]    = useState(false)
+  const [inputValue, setInputValue] = useState("")
+  const [isLoading,  setIsLoading]  = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -48,46 +39,42 @@ export function ChatButton() {
 
   const handleSendMessage = async () => {
     if (!inputValue.trim() || isLoading) return
-
     const userText = inputValue
-    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-
-    setInputValue('')
+    const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+    setInputValue("")
     setIsLoading(true)
 
     const userMsg: Message = {
       id: Date.now(),
-      sender: 'user',
+      sender: "user",
       text: userText,
       timestamp: time,
-      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=user',
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=user",
     }
-
     setMessages((prev) => [...prev, userMsg])
 
     try {
       const apiMessages = messages.map((m) => ({
-        role: m.sender === 'user' ? 'user' : 'assistant',
+        role: m.sender === "user" ? "user" : "assistant",
         content: m.text,
       }))
-      apiMessages.push({ role: 'user', content: userText })
+      apiMessages.push({ role: "user", content: userText })
 
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: apiMessages }),
       })
-
-      if (!res.ok) throw new Error('API Error')
+      if (!res.ok) throw new Error("API Error")
       const data = await res.json()
 
       setMessages((prev) => [
         ...prev,
         {
           id: Date.now() + 1,
-          sender: 'assistant',
+          sender: "assistant",
           text: data.reply,
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
           avatar: messagesData.assistant.avatar,
         },
       ])
@@ -98,179 +85,435 @@ export function ChatButton() {
     }
   }
 
-  // ── Floating button ──
+  /* ── Floating button ── */
   if (!isOpen) {
     return (
-      <div className="fixed bottom-5 right-5 z-50 sm:bottom-6 sm:right-6">
-        <button
-          onClick={() => setIsOpen(true)}
-          aria-label="Open Chat"
-          className="flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all duration-150 hover:shadow-xl active:scale-95 sm:h-15 sm:w-15"
-          style={{ backgroundColor: brand.primary }}
-          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = brand.primaryDark)}
-          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = brand.primary)}
-        >
-          <MessageCircle className="h-6 w-6 text-white" />
-        </button>
-      </div>
+      <>
+        <style>{floatingBtnStyles}</style>
+        <div className="fixed bottom-6 right-6 z-50">
+          <button
+            onClick={() => setIsOpen(true)}
+            aria-label="Open Chat"
+            className="chat-fab"
+          >
+            <span className="chat-fab-ring" />
+            <MessageCircle size={22} className="relative z-10 text-white" />
+          </button>
+        </div>
+      </>
     )
   }
 
   return (
-    <div className="fixed bottom-5 right-5 z-50 sm:bottom-6 sm:right-6">
-      <Card
-        className={`
-          flex flex-col overflow-hidden rounded-2xl shadow-2xl border
-          transition-all duration-300 ease-in-out
-          w-[calc(100vw-2.5rem)] sm:w-[360px]
-          ${isMinimized ? 'h-[60px]' : 'h-[75vh] sm:h-[520px]'}
-        `}
-        style={{ borderColor: brand.border }}
-      >
+    <>
+      <style>{chatStyles}</style>
+      <div className="fixed bottom-6 right-6 z-50">
+        <div className={`chat-card ${isMinimized ? "minimized" : ""}`}>
 
-        {/* ── Header ── */}
-        <CardHeader
-          className="flex shrink-0 flex-row items-center justify-between space-y-0 border-b px-4 py-3"
-          style={{ backgroundColor: brand.primary, borderColor: brand.primaryDark }}
-        >
-          <div className="flex items-center gap-3 min-w-0">
-            <Avatar className="h-8 w-8 shrink-0 border-2 border-white/20">
-              <AvatarImage src={messagesData.assistant.avatar} />
-              <AvatarFallback className="text-xs" style={{ backgroundColor: brand.light, color: brand.primary }}>
-                AI
-              </AvatarFallback>
-            </Avatar>
-            <div className="min-w-0">
-              <p className="truncate text-sm font-semibold text-white">
-                {messagesData.assistant.name}
-              </p>
-              {!isMinimized && (
-                <div className="flex items-center gap-1.5">
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-green-400" />
-                  </span>
-                  <span className="text-xs text-white/70">{messagesData.assistant.status}</span>
-                </div>
-              )}
+          {/* ── Header ── */}
+          <div className="chat-header">
+            <div className="header-glow" />
+            <div className="flex items-center gap-3 min-w-0 relative z-10">
+              <div className="avatar-wrap">
+                <Avatar className="h-9 w-9">
+                  <AvatarImage src={messagesData.assistant.avatar} />
+                  <AvatarFallback className="avatar-fallback">AI</AvatarFallback>
+                </Avatar>
+                <span className="status-dot" />
+              </div>
+              <div className="min-w-0">
+                <p className="header-name">{messagesData.assistant.name}</p>
+                {!isMinimized && (
+                  <p className="header-status">{messagesData.assistant.status}</p>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-1 relative z-10">
+              <button className="icon-btn" onClick={() => setIsMinimized(!isMinimized)} aria-label="Minimize">
+                <Minus size={14} />
+              </button>
+              <button className="icon-btn close-btn" onClick={() => setIsOpen(false)} aria-label="Close">
+                <X size={14} />
+              </button>
             </div>
           </div>
 
-          {/* Minimize + Close */}
-          <div className="flex shrink-0 items-center gap-1">
-            <button
-              onClick={() => setIsMinimized(!isMinimized)}
-              className="flex h-7 w-7 items-center justify-center rounded-lg text-white/70 transition-colors hover:bg-white/10 hover:text-white"
-            >
-              <Minus size={15} />
-            </button>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="flex h-7 w-7 items-center justify-center rounded-lg text-white/70 transition-colors hover:bg-red-500/20 hover:text-red-300"
-            >
-              <X size={15} />
-            </button>
-          </div>
-        </CardHeader>
+          {/* ── Body ── */}
+          {!isMinimized && (
+            <>
+              <div className="chat-body">
+                <div ref={scrollRef} className="messages-wrap">
 
-        {/* ── Messages ── */}
-        {!isMinimized && (
-          <>
-            <CardContent className="flex-1 overflow-hidden p-0">
-              <ScrollArea className="h-full">
-                <div ref={scrollRef} className="space-y-4 px-4 py-4">
+                  {/* Date chip */}
+                  <div className="date-chip">Today</div>
+
                   {messages.map((msg) => (
                     <div
                       key={msg.id}
-                      className={`flex items-end gap-2 ${msg.sender === 'user' ? 'flex-row-reverse' : ''}`}
+                      className={`msg-row ${msg.sender === "user" ? "user" : "assistant"}`}
                     >
-                      <Avatar className="h-7 w-7 shrink-0">
-                        <AvatarImage src={msg.avatar} />
-                        <AvatarFallback className="text-xs">
-                          {msg.sender === 'user' ? 'U' : 'A'}
-                        </AvatarFallback>
-                      </Avatar>
+                      {msg.sender === "assistant" && (
+                        <Avatar className="h-7 w-7 shrink-0 self-end">
+                          <AvatarImage src={msg.avatar} />
+                          <AvatarFallback className="avatar-fallback text-[10px]">A</AvatarFallback>
+                        </Avatar>
+                      )}
 
-                      <div className={`flex max-w-[75%] flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}>
-                        <div
-                          className="rounded-2xl px-3 py-2 text-sm leading-relaxed"
-                          style={
-                            msg.sender === 'user'
-                              ? { backgroundColor: brand.primary, color: '#fff', borderBottomRightRadius: '4px' }
-                              : { backgroundColor: brand.light, color: brand.primary, borderBottomLeftRadius: '4px' }
-                          }
-                        >
+                      <div className="bubble-group">
+                        <div className={`bubble ${msg.sender}`}>
                           {msg.text}
                         </div>
-                        <span className="mt-1 text-[10px] text-gray-400">
-                          {msg.timestamp}
-                        </span>
+                        <span className="msg-time">{msg.timestamp}</span>
                       </div>
+
+                      {msg.sender === "user" && (
+                        <Avatar className="h-7 w-7 shrink-0 self-end">
+                          <AvatarImage src={msg.avatar} />
+                          <AvatarFallback className="avatar-fallback text-[10px]">U</AvatarFallback>
+                        </Avatar>
+                      )}
                     </div>
                   ))}
 
-                  {/* Loading dots */}
+                  {/* Typing indicator */}
                   {isLoading && (
-                    <div className="flex items-end gap-2">
-                      <Avatar className="h-7 w-7 shrink-0">
+                    <div className="msg-row assistant">
+                      <Avatar className="h-7 w-7 shrink-0 self-end">
                         <AvatarImage src={messagesData.assistant.avatar} />
-                        <AvatarFallback className="text-xs">A</AvatarFallback>
+                        <AvatarFallback className="avatar-fallback text-[10px]">A</AvatarFallback>
                       </Avatar>
-                      <div
-                        className="flex items-center gap-1 rounded-2xl px-4 py-3"
-                        style={{ backgroundColor: brand.light, borderBottomLeftRadius: '4px' }}
-                      >
-                        {[0, 1, 2].map((i) => (
-                          <span
-                            key={i}
-                            className="h-1.5 w-1.5 animate-bounce rounded-full"
-                            style={{ backgroundColor: brand.primary, animationDelay: `${i * 0.15}s` }}
-                          />
-                        ))}
+                      <div className="bubble assistant typing-bubble">
+                        <span className="dot" style={{ animationDelay: "0s" }} />
+                        <span className="dot" style={{ animationDelay: "0.18s" }} />
+                        <span className="dot" style={{ animationDelay: "0.36s" }} />
                       </div>
                     </div>
                   )}
                 </div>
-              </ScrollArea>
-            </CardContent>
+              </div>
 
-            {/* ── Input footer ── */}
-            <CardFooter
-              className="shrink-0 border-t p-3"
-              style={{ borderColor: brand.border, backgroundColor: '#fff' }}
-            >
-              <form
-                onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }}
-                className="flex w-full items-center gap-2"
-              >
-                <input
-                  placeholder="Type a message..."
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  disabled={isLoading}
-                  className="flex-1 rounded-xl border px-3 py-2 text-sm outline-none transition-all placeholder:text-gray-400 disabled:opacity-50"
-                  style={{
-                    borderColor: brand.border,
-                    color: brand.primary,
-                  }}
-                  onFocus={(e) => (e.currentTarget.style.borderColor = brand.primary)}
-                  onBlur={(e) => (e.currentTarget.style.borderColor = brand.border)}
-                />
-                <button
-                  type="submit"
-                  disabled={!inputValue.trim() || isLoading}
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-white transition-all hover:shadow-md active:scale-95 disabled:cursor-not-allowed disabled:opacity-40"
-                  style={{ backgroundColor: brand.primary }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = brand.primaryDark)}
-                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = brand.primary)}
+              {/* ── Input ── */}
+              <div className="chat-footer">
+                <form
+                  onSubmit={(e) => { e.preventDefault(); handleSendMessage() }}
+                  className="input-row"
                 >
-                  <Send size={15} />
-                </button>
-              </form>
-            </CardFooter>
-          </>
-        )}
-      </Card>
-    </div>
+                  <input
+                    className="chat-input"
+                    placeholder="Type a message…"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    disabled={isLoading}
+                    autoComplete="off"
+                  />
+                  <button
+                    type="submit"
+                    disabled={!inputValue.trim() || isLoading}
+                    className="send-btn"
+                    aria-label="Send"
+                  >
+                    <Send size={15} />
+                  </button>
+                </form>
+                <p className="powered-by">
+                  <Sparkles size={10} style={{ display: "inline", marginRight: 3 }} />
+                  Powered by AI
+                </p>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </>
   )
 }
+
+/* ─────────────────────────────────────────
+   STYLES
+───────────────────────────────────────── */
+const floatingBtnStyles = `
+  .chat-fab {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00273D 0%, #004d75 100%);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(0,39,61,0.45), 0 1px 4px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .chat-fab:hover {
+    transform: scale(1.07);
+    box-shadow: 0 6px 28px rgba(0,39,61,0.55);
+  }
+  .chat-fab:active { transform: scale(0.96); }
+  .chat-fab-ring {
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 2px solid rgba(0,39,61,0.25);
+    animation: pulse-ring 2.5s ease-out infinite;
+  }
+  @keyframes pulse-ring {
+    0%   { transform: scale(1);   opacity: 0.6; }
+    70%  { transform: scale(1.3); opacity: 0; }
+    100% { transform: scale(1.3); opacity: 0; }
+  }
+`
+
+const chatStyles = `
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap');
+
+  .chat-card {
+    font-family: 'DM Sans', sans-serif;
+    width: min(370px, calc(100vw - 2.5rem));
+    height: 520px;
+    border-radius: 20px;
+    background: #ffffff;
+    box-shadow:
+      0 24px 60px rgba(0,39,61,0.18),
+      0 4px 16px rgba(0,0,0,0.08),
+      0 0 0 1px rgba(0,39,61,0.07);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: height 0.3s cubic-bezier(.4,0,.2,1);
+  }
+  .chat-card.minimized {
+    height: 62px;
+  }
+
+  /* Header */
+  .chat-header {
+    position: relative;
+    background: linear-gradient(135deg, #00273D 0%, #00405f 100%);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .header-glow {
+    position: absolute;
+    top: -30px; right: -20px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .avatar-wrap {
+    position: relative;
+  }
+  .status-dot {
+    position: absolute;
+    bottom: 1px; right: 1px;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: #4ade80;
+    border: 2px solid #00273D;
+  }
+  .avatar-fallback {
+    background: #EAF1F5;
+    color: #00273D;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .header-name {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+    margin: 0;
+  }
+  .header-status {
+    color: rgba(255,255,255,0.55);
+    font-size: 11px;
+    margin: 2px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .header-status::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #4ade80;
+    flex-shrink: 0;
+  }
+  .icon-btn {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,0.65);
+    background: transparent;
+    transition: background 0.15s, color 0.15s;
+  }
+  .icon-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
+  .close-btn:hover { background: rgba(239,68,68,0.22); color: #fca5a5; }
+
+  /* Body */
+  .chat-body {
+    flex: 1;
+    overflow-y: auto;
+    background: #f7f9fb;
+    padding: 0;
+    scrollbar-width: thin;
+    scrollbar-color: #d1dde5 transparent;
+  }
+  .chat-body::-webkit-scrollbar { width: 4px; }
+  .chat-body::-webkit-scrollbar-track { background: transparent; }
+  .chat-body::-webkit-scrollbar-thumb { background: #d1dde5; border-radius: 4px; }
+
+  .messages-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px 14px 12px;
+    min-height: 100%;
+  }
+
+  .date-chip {
+    align-self: center;
+    font-size: 10px;
+    font-weight: 600;
+    color: #94a3b8;
+    background: #eef2f7;
+    border-radius: 20px;
+    padding: 3px 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* Message rows */
+  .msg-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+  }
+  .msg-row.user { flex-direction: row-reverse; }
+
+  .bubble-group {
+    display: flex;
+    flex-direction: column;
+    max-width: 72%;
+  }
+  .msg-row.user .bubble-group { align-items: flex-end; }
+  .msg-row.assistant .bubble-group { align-items: flex-start; }
+
+  .bubble {
+    padding: 10px 14px;
+    font-size: 13px;
+    line-height: 1.55;
+    border-radius: 18px;
+    word-break: break-word;
+  }
+  .bubble.user {
+    background: linear-gradient(135deg, #00273D 0%, #004d75 100%);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,39,61,0.22);
+  }
+  .bubble.assistant {
+    background: #ffffff;
+    color: #1e3a4f;
+    border-bottom-left-radius: 4px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.07), 0 0 0 1px rgba(0,39,61,0.06);
+  }
+  .msg-time {
+    font-size: 10px;
+    color: #b0bec5;
+    margin-top: 4px;
+    padding: 0 2px;
+  }
+
+  /* Typing dots */
+  .typing-bubble {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 12px 16px;
+  }
+  .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #90a4b0;
+    display: inline-block;
+    animation: bounce-dot 1.1s ease-in-out infinite;
+  }
+  @keyframes bounce-dot {
+    0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
+    40%            { transform: translateY(-5px); opacity: 1; }
+  }
+
+  /* Footer */
+  .chat-footer {
+    flex-shrink: 0;
+    background: #ffffff;
+    border-top: 1px solid #eef2f7;
+    padding: 10px 12px 8px;
+  }
+  .input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f1f5f8;
+    border-radius: 14px;
+    padding: 4px 4px 4px 14px;
+    border: 1.5px solid transparent;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .input-row:focus-within {
+    border-color: #00273D;
+    background: #fff;
+  }
+  .chat-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: #1e3a4f;
+    outline: none;
+    padding: 6px 0;
+  }
+  .chat-input::placeholder { color: #9bb0bc; }
+  .chat-input:disabled { opacity: 0.5; }
+
+  .send-btn {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #00273D 0%, #004d75 100%);
+    color: #fff;
+    flex-shrink: 0;
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+    box-shadow: 0 2px 8px rgba(0,39,61,0.3);
+  }
+  .send-btn:hover:not(:disabled) {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0,39,61,0.4);
+  }
+  .send-btn:active:not(:disabled) { transform: scale(0.96); }
+  .send-btn:disabled { opacity: 0.35; cursor: not-allowed; box-shadow: none; }
+
+  .powered-by {
+    text-align: center;
+    font-size: 10px;
+    color: #b0bec5;
+    margin: 6px 0 0;
+    letter-spacing: 0.02em;
+  }
+`

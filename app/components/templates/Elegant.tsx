@@ -22,7 +22,7 @@ const SectionTitle = ({ title }: { title: string }) => (
   <div style={{ marginBottom: '10px' }}>
     <h2 style={{
       fontFamily: '"Lato", sans-serif',
-      fontSize: '11px',
+      fontSize: '14px',
       fontWeight: '700',
       letterSpacing: '0.2em',
       textTransform: 'uppercase',
@@ -45,7 +45,7 @@ export default function ElegantTemplate({ data }: ElegantTemplateProps) {
       style={{
         minHeight: '297mm',
         fontFamily: '"Libre Baskerville", Georgia, serif',
-        fontSize: '10px',
+        fontSize: '12px',
         color: '#2a2a2a',
       }}
     >
@@ -69,6 +69,11 @@ export default function ElegantTemplate({ data }: ElegantTemplateProps) {
           margin: 3px 0;
           line-height: 1.7;
         }
+        @media (max-width: 768px) {
+          .elegant-template {
+            padding: 20px 16px !important;
+          }
+        }
       `}</style>
 
       <div className="elegant-template" style={{ padding: '36px 40px' }}>
@@ -77,7 +82,7 @@ export default function ElegantTemplate({ data }: ElegantTemplateProps) {
         <div style={{ textAlign: 'center', marginBottom: '6px' }}>
           <h1 style={{
             fontFamily: '"Lato", sans-serif',
-            fontSize: '28px',
+            fontSize: '30px',
             fontWeight: '900',
             letterSpacing: '0.15em',
             textTransform: 'uppercase',
@@ -89,7 +94,7 @@ export default function ElegantTemplate({ data }: ElegantTemplateProps) {
           {personalInfo.title && (
             <p style={{
               fontFamily: '"Lato", sans-serif',
-              fontSize: '9px',
+              fontSize: '12px',
               fontWeight: '400',
               letterSpacing: '0.2em',
               textTransform: 'uppercase',
@@ -123,14 +128,14 @@ export default function ElegantTemplate({ data }: ElegantTemplateProps) {
               <span key={i} style={{ display: 'flex', alignItems: 'center' }}>
                 <span style={{
                   fontFamily: '"Lato", sans-serif',
-                  fontSize: '9px',
+                  fontSize: '12px',
                   color: '#555',
                   letterSpacing: '0.03em',
                 }}>
                   {item}
                 </span>
                 {i < arr.length - 1 && (
-                  <span style={{ margin: '0 12px', color: '#aaa', fontSize: '11px' }}>|</span>
+                  <span style={{ margin: '0 12px', color: '#aaa', fontSize: '12px' }}>|</span>
                 )}
               </span>
             ))}
@@ -143,7 +148,7 @@ export default function ElegantTemplate({ data }: ElegantTemplateProps) {
             <SectionTitle title="Professional Summary" />
             <div
               data-html
-              style={{ fontSize: '10px', lineHeight: '1.75', color: '#444', textAlign: 'justify' }}
+              style={{ fontSize: '12px', lineHeight: '1.75', color: '#444', textAlign: 'justify' }}
               dangerouslySetInnerHTML={{ __html: personalInfo.summary }}
             />
           </div>
@@ -160,7 +165,7 @@ export default function ElegantTemplate({ data }: ElegantTemplateProps) {
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1px' }}>
                     <p style={{
                       fontFamily: '"Lato", sans-serif',
-                      fontSize: '11px',
+                      fontSize: '14px',
                       fontWeight: '700',
                       color: '#1a1a1a',
                     }}>
@@ -168,7 +173,7 @@ export default function ElegantTemplate({ data }: ElegantTemplateProps) {
                     </p>
                     <p style={{
                       fontFamily: '"Lato", sans-serif',
-                      fontSize: '10px',
+                      fontSize: '12px',
                       color: '#555',
                       flexShrink: 0,
                       marginLeft: '8px',
@@ -180,7 +185,7 @@ export default function ElegantTemplate({ data }: ElegantTemplateProps) {
                   {/* Position */}
                   <p style={{
                     fontFamily: '"Libre Baskerville", serif',
-                    fontSize: '10px',
+                    fontSize: '12px',
                     fontStyle: 'italic',
                     color: '#666',
                     marginBottom: '5px',
@@ -192,7 +197,7 @@ export default function ElegantTemplate({ data }: ElegantTemplateProps) {
                   {exp.description && (
                     <div
                       data-html
-                      style={{ fontSize: '10px', lineHeight: '1.65', color: '#444' }}
+                      style={{ fontSize: '12px', lineHeight: '1.65', color: '#444' }}
                       dangerouslySetInnerHTML={{ __html: exp.description }}
                     />
                   )}
@@ -212,7 +217,7 @@ export default function ElegantTemplate({ data }: ElegantTemplateProps) {
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                     <p style={{
                       fontFamily: '"Lato", sans-serif',
-                      fontSize: '11px',
+                      fontSize: '14px',
                       fontWeight: '700',
                       color: '#1a1a1a',
                     }}>
@@ -220,7 +225,7 @@ export default function ElegantTemplate({ data }: ElegantTemplateProps) {
                     </p>
                     <p style={{
                       fontFamily: '"Lato", sans-serif',
-                      fontSize: '10px',
+                      fontSize: '12px',
                       color: '#555',
                       flexShrink: 0,
                       marginLeft: '8px',
@@ -231,7 +236,7 @@ export default function ElegantTemplate({ data }: ElegantTemplateProps) {
                   <p style={{
                     fontFamily: '"Libre Baskerville", serif',
                     fontStyle: 'italic',
-                    fontSize: '10px',
+                    fontSize: '12px',
                     color: '#666',
                   }}>
                     {edu.degree}{edu.field ? ` in ${edu.field}` : ''}
@@ -252,7 +257,7 @@ export default function ElegantTemplate({ data }: ElegantTemplateProps) {
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                     <p style={{
                       fontFamily: '"Lato", sans-serif',
-                      fontSize: '11px',
+                      fontSize: '14px',
                       fontWeight: '700',
                       color: '#1a1a1a',
                     }}>
@@ -263,7 +268,7 @@ export default function ElegantTemplate({ data }: ElegantTemplateProps) {
                         href={toSafeUrl(proj.githubUrl)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        style={{ fontSize: '9px', color: '#888', marginLeft: '8px', flexShrink: 0 }}
+                        style={{ fontSize: '12px', color: '#888', marginLeft: '8px', flexShrink: 0 }}
                       >
                         {toDisplayUrl(proj.githubUrl)}
                       </a>
@@ -272,7 +277,7 @@ export default function ElegantTemplate({ data }: ElegantTemplateProps) {
                   {proj.description && (
                     <div
                       data-html
-                      style={{ fontSize: '10px', lineHeight: '1.65', color: '#444' }}
+                      style={{ fontSize: '12px', lineHeight: '1.65', color: '#444' }}
                       dangerouslySetInnerHTML={{ __html: proj.description }}
                     />
                   )}
@@ -286,7 +291,7 @@ export default function ElegantTemplate({ data }: ElegantTemplateProps) {
         {skills.length > 0 && (
           <div style={{ marginBottom: '18px' }}>
             <SectionTitle title="Skills" />
-            <p style={{ fontSize: '10px', color: '#444', lineHeight: '1.7' }}>
+            <p style={{ fontSize: '12px', color: '#444', lineHeight: '1.7' }}>
               {skills.map(s => s.name).join('  •  ')}
             </p>
           </div>
@@ -296,7 +301,7 @@ export default function ElegantTemplate({ data }: ElegantTemplateProps) {
         {languages.length > 0 && (
           <div style={{ marginBottom: '18px' }}>
             <SectionTitle title="Languages" />
-            <p style={{ fontSize: '10px', color: '#444', lineHeight: '1.7' }}>
+            <p style={{ fontSize: '12px', color: '#444', lineHeight: '1.7' }}>
               {languages.map(l => l.name).join('  •  ')}
             </p>
           </div>
@@ -310,14 +315,14 @@ export default function ElegantTemplate({ data }: ElegantTemplateProps) {
               {certificates.map((cert) => (
                 <div key={cert.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                   <div>
-                    <span style={{ fontWeight: '700', fontSize: '10px', fontFamily: '"Lato", sans-serif' }}>{cert.name}</span>
-                    <span style={{ fontSize: '10px', color: '#666', fontStyle: 'italic' }}> — {cert.issuer}</span>
+                    <span style={{ fontWeight: '700', fontSize: '14px', fontFamily: '"Lato", sans-serif' }}>{cert.name}</span>
+                    <span style={{ fontSize: '12px', color: '#666', fontStyle: 'italic' }}> — {cert.issuer}</span>
                     {cert.credentialId && (
-                      <span style={{ fontSize: '9px', color: '#999' }}> (ID: {cert.credentialId})</span>
+                      <span style={{ fontSize: '12px', color: '#999' }}> (ID: {cert.credentialId})</span>
                     )}
                   </div>
                   {cert.date && (
-                    <span style={{ fontSize: '9px', color: '#888', marginLeft: '8px', flexShrink: 0 }}>
+                    <span style={{ fontSize: '12px', color: '#888', marginLeft: '8px', flexShrink: 0 }}>
                       {cert.date ? new Date(cert.date).getUTCFullYear() : ''}
                     </span>
                   )}
@@ -334,14 +339,14 @@ export default function ElegantTemplate({ data }: ElegantTemplateProps) {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               {data.references.map((ref) => (
                 <div key={ref.id}>
-                  <p style={{ fontWeight: '700', fontSize: '10px', fontFamily: '"Lato", sans-serif', color: '#1a1a1a' }}>
+                  <p style={{ fontWeight: '700', fontSize: '14px', fontFamily: '"Lato", sans-serif', color: '#1a1a1a' }}>
                     {ref.name}
                   </p>
-                  <p style={{ fontSize: '10px', fontStyle: 'italic', color: '#666' }}>
+                  <p style={{ fontSize: '12px', fontStyle: 'italic', color: '#666' }}>
                     {ref.position}{ref.company ? ` · ${ref.company}` : ''}
                   </p>
-                  {ref.phone && <p style={{ fontSize: '9px', color: '#888' }}>Phone: {ref.phone}</p>}
-                  {ref.email && <p style={{ fontSize: '9px', color: '#888' }}>Email: {ref.email}</p>}
+                  {ref.phone && <p style={{ fontSize: '12px', color: '#888' }}>Phone: {ref.phone}</p>}
+                  {ref.email && <p style={{ fontSize: '12px', color: '#888' }}>Email: {ref.email}</p>}
                 </div>
               ))}
             </div>

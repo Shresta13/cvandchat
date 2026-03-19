@@ -24,7 +24,7 @@ const cleanHTML = (html: string) => {
 const SectionTitle = ({ title, light = false }: { title: string; light?: boolean }) => (
   <h2
     style={{
-      fontSize: '16px', // ✅ heading
+      fontSize: '14px',
       fontWeight: 700,
       textTransform: 'uppercase',
       color: light ? '#fff' : '#1a2940',
@@ -50,18 +50,32 @@ export default function DarkSidebarTemplate({ data }: DarkSidebarTemplateProps) 
 
   return (
     <div
+      className="darker-template-root"
       style={{
         minHeight: '297mm',
         fontFamily: '"Open Sans", sans-serif',
-        fontSize: '12px', // ✅ paragraph
+        fontSize: '12px',
         lineHeight: '1.6',
         display: 'flex',
       }}
     >
-      <div style={{ display: 'flex', width: '100%' }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .darker-template-layout {
+            flex-direction: column !important;
+          }
+          .darker-template-left,
+          .darker-template-right {
+            width: 100% !important;
+            padding: 16px !important;
+          }
+        }
+      `}</style>
+      <div className="darker-template-layout" style={{ display: 'flex', width: '100%' }}>
 
         {/* LEFT SIDEBAR */}
         <div
+          className="darker-template-left"
           style={{
             width: '35%',
             backgroundColor: '#1a2940',
@@ -83,47 +97,40 @@ export default function DarkSidebarTemplate({ data }: DarkSidebarTemplateProps) 
             <User size={40} color="rgba(255,255,255,0.6)" />
           </div>
 
-        
-         {/* CONTACT */}
-<SectionTitle title="Contact" light />
-<div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-
-  {personalInfo.phone && (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-      <Phone size={14} color="rgba(255,255,255,0.7)" />
-      <span>{personalInfo.phone}</span>
-    </div>
-  )}
-
-  {personalInfo.email && (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-      <Mail size={14} color="rgba(255,255,255,0.7)" />
-      <span>{personalInfo.email}</span>
-    </div>
-  )}
-
-  {personalInfo.location && (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-      <MapPin size={14} color="rgba(255,255,255,0.7)" />
-      <span>{personalInfo.location}</span>
-    </div>
-  )}
-
-  {personalInfo.linkedin && (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-      <Linkedin size={14} color="rgba(255,255,255,0.7)" />
-      <span>{toDisplayUrl(personalInfo.linkedin)}</span>
-    </div>
-  )}
-
-  {personalInfo.github && (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-      <Github size={14} color="rgba(255,255,255,0.7)" />
-      <span>{toDisplayUrl(personalInfo.github)}</span>
-    </div>
-  )}
-
-</div>
+          {/* CONTACT */}
+          <SectionTitle title="Contact" light />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {personalInfo.phone && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Phone size={14} color="rgba(255,255,255,0.7)" />
+                <span>{personalInfo.phone}</span>
+              </div>
+            )}
+            {personalInfo.email && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Mail size={14} color="rgba(255,255,255,0.7)" />
+                <span>{personalInfo.email}</span>
+              </div>
+            )}
+            {personalInfo.location && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <MapPin size={14} color="rgba(255,255,255,0.7)" />
+                <span>{personalInfo.location}</span>
+              </div>
+            )}
+            {personalInfo.linkedin && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Linkedin size={14} color="rgba(255,255,255,0.7)" />
+                <span>{toDisplayUrl(personalInfo.linkedin)}</span>
+              </div>
+            )}
+            {personalInfo.github && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Github size={14} color="rgba(255,255,255,0.7)" />
+                <span>{toDisplayUrl(personalInfo.github)}</span>
+              </div>
+            )}
+          </div>
 
           {/* SKILLS */}
           {skills?.length > 0 && (
@@ -166,56 +173,57 @@ export default function DarkSidebarTemplate({ data }: DarkSidebarTemplateProps) 
         </div>
 
         {/* RIGHT CONTENT */}
-        <div style={{ width: '65%', padding: '30px' }}>
-          
+        <div className="darker-template-right" style={{ width: '65%', padding: '30px' }}>
+
           {/* NAME */}
-          <h1 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '4px' }}>
+          <h1 style={{ fontSize: '30px', fontWeight: 800, marginBottom: '4px' }}>
             {personalInfo.fullName}
           </h1>
-          <p style={{ fontSize: '16px', color: '#666', marginBottom: '20px' }}>
+          <p style={{ fontSize: '12px', color: '#666', marginBottom: '12px' }}>
             {personalInfo.title}
           </p>
-{/* SUMMARY */}
-{personalInfo.summary && (
-  <div style={{ marginBottom: '20px' }}>
-    
-    <p style={{
-      fontSize: '16px',
-      fontWeight: 600,
-      marginBottom: '8px',
-      color: '#1a2940'
-    }}>
-      Summary
-    </p>
 
-    <div
-      style={{
-        fontSize: '12px',
-        lineHeight: '1.7',
-        color: '#444',
-      }}
-      dangerouslySetInnerHTML={{
-        __html: cleanHTML(personalInfo.summary),
-      }}
-    />
-  </div>
-)}
+          {/* SUMMARY */}
+          {personalInfo.summary && (
+            <div style={{ marginBottom: '12px' }}>
+              <p style={{
+                fontSize: '14px',
+                fontWeight: 600,
+                marginBottom: '12px',
+                color: '#1a2940',
+              }}>
+                Summary
+              </p>
+              <div
+                style={{ fontSize: '12px', lineHeight: '1.7', color: '#444' }}
+                dangerouslySetInnerHTML={{ __html: cleanHTML(personalInfo.summary) }}
+              />
+            </div>
+          )}
+
           {/* EXPERIENCE */}
           {experience?.length > 0 && (
             <div>
               <SectionTitle title="Work Experience" />
               {experience.map((exp, i) => (
-                <div key={i} style={{ marginBottom: '16px' }}>
-                  <p style={{ fontSize: '16px', fontWeight: 600 }}>
+                <div key={i} style={{ marginBottom: '12px' }}>
+                  <p style={{ fontSize: '14px', fontWeight: 600 }}>
                     {exp.position}
                   </p>
-                  <p style={{ fontWeight: 500 }}>
+                  <p style={{ fontSize: '12px', fontWeight: 500 }}>
                     {exp.company}
                   </p>
-                  <p style={{ color: '#666', marginBottom: '6px' }}>
+                  <p style={{ fontSize: '12px', color: '#666', marginBottom: '6px' }}>
                     {formatDate(exp.startDate)} - {exp.current ? 'Present' : formatDate(exp.endDate)}
                   </p>
-                  <p>{exp.description}</p>
+                  {/* ✅ Fixed: renders HTML properly instead of raw text */}
+                  {exp.description && (
+                    <div
+                      style={{ fontSize: '12px', lineHeight: '1.7', color: '#444' }}
+                      className="[&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mt-1 [&_li]:mt-0.5 [&_strong]:font-bold [&_em]:italic"
+                      dangerouslySetInnerHTML={{ __html: cleanHTML(exp.description) }}
+                    />
+                  )}
                 </div>
               ))}
             </div>
@@ -226,12 +234,12 @@ export default function DarkSidebarTemplate({ data }: DarkSidebarTemplateProps) 
             <div>
               <SectionTitle title="Education" />
               {education.map((edu, i) => (
-                <div key={i} style={{ marginBottom: '16px' }}>
-                  <p style={{ fontSize: '16px', fontWeight: 600 }}>
+                <div key={i} style={{ marginBottom: '12px' }}>
+                  <p style={{ fontSize: '14px', fontWeight: 600 }}>
                     {edu.degree}
                   </p>
-                  <p>{edu.institution}</p>
-                  <p style={{ color: '#666' }}>
+                  <p style={{ fontSize: '12px' }}>{edu.institution}</p>
+                  <p style={{ fontSize: '12px', color: '#666' }}>
                     {formatDate(edu.startDate)} - {edu.current ? 'Present' : formatDate(edu.endDate)}
                   </p>
                 </div>

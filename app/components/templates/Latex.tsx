@@ -22,13 +22,13 @@ const toDisplayUrl = (value: string) => value.replace(/^https?:\/\//i, "");
 const SectionHeader = ({ title }: { title: string }) => (
   <div
     style={{
-      fontSize: "13px",
+      fontSize: "18px",
       fontWeight: "bold",
       textTransform: "uppercase",
       letterSpacing: "0.08em",
       borderBottom: "1px solid #000",
       paddingBottom: "2px",
-      marginBottom: "6px",
+      marginBottom: "12px",
     }}
   >
     {title}
@@ -42,21 +42,21 @@ export default function LatexTemplate({ data }: LatexTemplateProps) {
       style={{
         minHeight: "297mm",
         fontFamily: '"Computer Modern", "Latin Modern", Georgia, serif',
-        fontSize: "10px", // ✅ base body text smaller
+        fontSize: "12px", // ✅ base body text smaller
         color: "#000",
       }}
     >
       {/* Name */}
       <div className="text-center mb-2">
         <h1
-          className="text-xl sm:text-2xl font-normal tracking-wide mb-2"
+          className="text-3xl font-normal tracking-wide mb-2"
           style={{ letterSpacing: "0.05em" }}
         >
           {data.personalInfo.fullName || "Your Name"}
         </h1>
 
         {/* Contact row */}
-        <div className="flex justify-center flex-wrap gap-x-3 gap-y-1" style={{ fontSize: "9px" }}>
+        <div className="flex justify-center flex-wrap gap-x-3 gap-y-1" style={{ fontSize: "12px" }}>
           {data.personalInfo.email && <span>{data.personalInfo.email}</span>}
           {data.personalInfo.phone && (
             <>
@@ -103,12 +103,12 @@ export default function LatexTemplate({ data }: LatexTemplateProps) {
 
       {/* Summary */}
       {data.personalInfo.summary && (
-        <div className="mb-4">
+        <div className="mb-3">
           <SectionHeader title="Summary" />
           {/* ✅ Body text — 9px */}
           <div
             className="leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mt-1 [&_li]:mt-0.5 [&_strong]:font-bold [&_em]:italic"
-            style={{ fontSize: "9px", textAlign: "justify", color: "#222" }}
+            style={{ fontSize: "12px", textAlign: "justify", color: "#222" }}
             dangerouslySetInnerHTML={{ __html: data.personalInfo.summary }}
           />
         </div>
@@ -116,30 +116,30 @@ export default function LatexTemplate({ data }: LatexTemplateProps) {
 
       {/* Experience */}
       {data.experience.length > 0 && (
-        <div className="mb-4">
+        <div className="mb-3">
           <SectionHeader title="Experience" />
           <div className="flex flex-col gap-3">
             {data.experience.map((exp) => (
               <div key={exp.id}>
                 <div className="flex flex-wrap justify-between items-baseline gap-1">
                   {/* ✅ Job title — 11px bold */}
-                  <span style={{ fontWeight: "bold", fontSize: "11px" }}>
+                  <span style={{ fontWeight: "bold", fontSize: "14px" }}>
                     {exp.position}
                   </span>
                   {/* ✅ Date — 9px */}
-                  <span style={{ fontSize: "9px", fontStyle: "italic", color: "#444" }} className="shrink-0">
+                  <span style={{ fontSize: "12px", fontStyle: "italic", color: "#444" }} className="shrink-0">
                     {formatDate(exp.startDate)} – {exp.current ? "Present" : formatDate(exp.endDate)}
                   </span>
                 </div>
                 {/* ✅ Company — 9px italic */}
-                <div style={{ fontStyle: "italic", fontSize: "9px", color: "#555" }}>
+                <div style={{ fontStyle: "italic", fontSize: "12px", color: "#555" }}>
                   {exp.company}{exp.location && `, ${exp.location}`}
                 </div>
                 {/* ✅ Description — 9px */}
                 {exp.description && (
                   <div
                     className="mt-1 leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mt-1 [&_li]:mt-0.5 [&_strong]:font-bold [&_em]:italic"
-                    style={{ fontSize: "9px", color: "#222" }}
+                    style={{ fontSize: "12px", color: "#222" }}
                     dangerouslySetInnerHTML={{ __html: exp.description }}
                   />
                 )}
@@ -151,23 +151,23 @@ export default function LatexTemplate({ data }: LatexTemplateProps) {
 
       {/* Education */}
       {data.education.length > 0 && (
-        <div className="mb-4">
+        <div className="mb-3">
           <SectionHeader title="Education" />
           <div className="flex flex-col gap-2">
             {data.education.map((edu) => (
               <div key={edu.id}>
                 <div className="flex flex-wrap justify-between items-baseline gap-1">
                   {/* ✅ Degree — 11px bold */}
-                  <span style={{ fontWeight: "bold", fontSize: "11px" }}>
+                  <span style={{ fontWeight: "bold", fontSize: "14px" }}>
                     {edu.degree}{edu.field ? ` in ${edu.field}` : ""}
                   </span>
                   {/* ✅ Date — 9px */}
-                  <span style={{ fontSize: "9px", fontStyle: "italic", color: "#444" }} className="shrink-0">
+                  <span style={{ fontSize: "12px", fontStyle: "italic", color: "#444" }} className="shrink-0">
                     {formatDate(edu.startDate)} – {edu.current ? "Present" : formatDate(edu.endDate)}
                   </span>
                 </div>
                 {/* ✅ Institution — 9px italic */}
-                <div style={{ fontStyle: "italic", fontSize: "9px", color: "#555" }}>
+                <div style={{ fontStyle: "italic", fontSize: "12px", color: "#555" }}>
                   {edu.institution}
                 </div>
               </div>
@@ -178,10 +178,10 @@ export default function LatexTemplate({ data }: LatexTemplateProps) {
 
       {/* Skills */}
       {data.skills.length > 0 && (
-        <div className="mb-4">
+        <div className="mb-3">
           <SectionHeader title="Skills" />
           {/* ✅ Skills — 9px */}
-          <div className="flex flex-wrap gap-x-1 gap-y-1" style={{ fontSize: "9px" }}>
+          <div className="flex flex-wrap gap-x-1 gap-y-1" style={{ fontSize: "12px" }}>
             {data.skills.map((skill, index) => (
               <span key={skill.id}>
                 <span style={{ fontWeight: "bold" }}>{skill.name}</span>
@@ -196,10 +196,10 @@ export default function LatexTemplate({ data }: LatexTemplateProps) {
 
       {/* Languages */}
       {data.languages.length > 0 && (
-        <div className="mb-4">
+        <div className="mb-3">
           <SectionHeader title="Languages" />
           {/* ✅ Languages — 9px */}
-          <div className="flex flex-wrap gap-x-1 gap-y-1" style={{ fontSize: "9px" }}>
+          <div className="flex flex-wrap gap-x-1 gap-y-1" style={{ fontSize: "12px" }}>
             {data.languages.map((lang, index) => (
               <span key={lang.id}>
                 <span style={{ fontWeight: "bold" }}>{lang.name}</span>
@@ -214,14 +214,14 @@ export default function LatexTemplate({ data }: LatexTemplateProps) {
 
       {/* Certifications */}
       {data.certificates.length > 0 && (
-        <div className="mb-4">
+        <div className="mb-3">
           <SectionHeader title="Certifications" />
           <div className="flex flex-col gap-2">
             {data.certificates.map((cert) => (
               <div
                 key={cert.id}
                 className="flex flex-wrap justify-between items-baseline gap-1"
-                style={{ fontSize: "9px" }}
+                style={{ fontSize: "12px" }}
               >
                 <div>
                   {/* ✅ Cert name — bold */}
@@ -246,13 +246,13 @@ export default function LatexTemplate({ data }: LatexTemplateProps) {
 
       {/* Projects */}
       {data.projects.length > 0 && (
-        <div className="mb-4">
+        <div className="mb-3">
           <SectionHeader title="Projects" />
           <div className="flex flex-col gap-3">
             {data.projects.map((project) => (
               <div key={project.id}>
                 <div className="flex flex-wrap justify-between items-baseline gap-1">
-                  <span style={{ fontWeight: 'bold', fontSize: '11px' }}>
+                  <span style={{ fontWeight: 'bold', fontSize: '14px' }}>
                     {project.name}
                   </span>
                   {project.githubUrl && (
@@ -260,7 +260,7 @@ export default function LatexTemplate({ data }: LatexTemplateProps) {
                       href={toSafeUrl(project.githubUrl)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      style={{ fontSize: '9px', color: '#00008B', textDecoration: 'underline' }}
+                      style={{ fontSize: '12px', color: '#00008B', textDecoration: 'underline' }}
                       className="shrink-0"
                     >
                       {toDisplayUrl(project.githubUrl)}
@@ -270,7 +270,7 @@ export default function LatexTemplate({ data }: LatexTemplateProps) {
                 {project.description && (
                   <div
                     className="mt-1 leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mt-1 [&_li]:mt-0.5 [&_strong]:font-bold [&_em]:italic"
-                    style={{ fontSize: '9px', color: '#222' }}
+                    style={{ fontSize: '12px', color: '#222' }}
                     dangerouslySetInnerHTML={{ __html: project.description }}
                   />
                 )}
@@ -282,12 +282,12 @@ export default function LatexTemplate({ data }: LatexTemplateProps) {
 
       {/* References */}
       {data.references.length > 0 && (
-        <div className="mb-4">
+        <div className="mb-3">
           <SectionHeader title="References" />
           <div className="flex flex-col gap-2">
             {data.references.map((reference) => (
-              <div key={reference.id} style={{ fontSize: '9px' }}>
-                <div style={{ fontWeight: 'bold', fontSize: '10px' }}>{reference.name}</div>
+              <div key={reference.id} style={{ fontSize: '12px' }}>
+                <div style={{ fontWeight: 'bold', fontSize: '14px' }}>{reference.name}</div>
                 <div style={{ fontStyle: 'italic', color: '#444' }}>
                   {reference.position}
                   {reference.company ? `, ${reference.company}` : ''}

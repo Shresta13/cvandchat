@@ -28,7 +28,7 @@ const SectionTitle = ({ title }: { title: string }) => (
   <div style={{ marginBottom: '8px', marginTop: '2px' }}>
     <h2 style={{
       fontFamily: '"Lato", sans-serif',
-      fontSize: '9px',
+      fontSize: '14px',
       fontWeight: '700',
       letterSpacing: '0.2em',
       textTransform: 'uppercase' as const,
@@ -51,7 +51,7 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
       style={{
         minHeight: '297mm',
         fontFamily: '"Libre Baskerville", Georgia, serif',
-        fontSize: '10px',
+        fontSize: '12px',
         color: '#1a1a1a',
       }}
     >
@@ -71,12 +71,23 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
           display: none !important;
           content: none !important;
         }
+        @media (max-width: 768px) {
+          .two-col-template {
+            flex-direction: column !important;
+          }
+          .two-col-left,
+          .two-col-right {
+            width: 100% !important;
+            border-right: none !important;
+            padding: 16px !important;
+          }
+        }
       `}</style>
 
       <div className="two-col-template" style={{ display: 'flex', minHeight: '297mm' }}>
 
         {/* ── LEFT COLUMN ── */}
-        <div style={{
+        <div className="two-col-left" style={{
           width: '36%',
           padding: '24px 16px 24px 20px',
           borderRight: '1px solid #e0e0e0',
@@ -89,7 +100,7 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
           <div style={{ marginBottom: '14px' }}>
             <h1 style={{
               fontFamily: '"Lato", sans-serif',
-              fontSize: '22px',
+              fontSize: '30px',
               fontWeight: '700',
               letterSpacing: '0.06em',
               textTransform: 'uppercase' as const,
@@ -108,7 +119,7 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
             {personalInfo.title && (
               <p style={{
                 fontFamily: '"Lato", sans-serif',
-                fontSize: '8px',
+                fontSize: '12px',
                 fontWeight: '300',
                 letterSpacing: '0.16em',
                 textTransform: 'uppercase' as const,
@@ -123,25 +134,25 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
           {/* Contact */}
           <div style={{ marginBottom: '14px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
             {personalInfo.phone && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#555', fontSize: '9px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#555', fontSize: '12px' }}>
                 <Phone size={9} style={{ flexShrink: 0 }} />
                 <span>{personalInfo.phone}</span>
               </div>
             )}
             {personalInfo.email && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#555', fontSize: '9px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#555', fontSize: '12px' }}>
                 <Mail size={9} style={{ flexShrink: 0 }} />
                 <span style={{ wordBreak: 'break-all' }}>{personalInfo.email}</span>
               </div>
             )}
             {personalInfo.location && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#555', fontSize: '9px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#555', fontSize: '12px' }}>
                 <MapPin size={9} style={{ flexShrink: 0 }} />
                 <span>{personalInfo.location}</span>
               </div>
             )}
             {personalInfo.linkedin && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#555', fontSize: '9px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#555', fontSize: '12px' }}>
                 <Linkedin size={9} style={{ flexShrink: 0 }} />
                 <a href={toSafeUrl(personalInfo.linkedin)} target="_blank" rel="noopener noreferrer" style={{ color: '#555', wordBreak: 'break-all' }}>
                   {toDisplayUrl(personalInfo.linkedin)}
@@ -149,7 +160,7 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
               </div>
             )}
             {personalInfo.github && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#555', fontSize: '9px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#555', fontSize: '12px' }}>
                 <Github size={9} style={{ flexShrink: 0 }} />
                 <a href={toSafeUrl(personalInfo.github)} target="_blank" rel="noopener noreferrer" style={{ color: '#555', wordBreak: 'break-all' }}>
                   {toDisplayUrl(personalInfo.github)}
@@ -165,14 +176,14 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {education.map((edu) => (
                   <div key={edu.id}>
-                    <p style={{ fontSize: '8px', color: '#888', fontFamily: '"Lato", sans-serif', letterSpacing: '0.04em' }}>
+                    <p style={{ fontSize: '12px', color: '#888', fontFamily: '"Lato", sans-serif', letterSpacing: '0.04em' }}>
                       {formatDateShort(edu.startDate)}{edu.endDate || edu.current ? ` – ${edu.current ? 'Present' : formatDateShort(edu.endDate)}` : ''}
                     </p>
-                    <p style={{ fontSize: '9px', fontWeight: '700', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginTop: '2px', fontFamily: '"Lato", sans-serif', lineHeight: '1.3' }}>
+                    <p style={{ fontSize: '14px', fontWeight: '700', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginTop: '2px', fontFamily: '"Lato", sans-serif', lineHeight: '1.3' }}>
                       {edu.institution}
                     </p>
                     {edu.degree && (
-                      <p style={{ fontSize: '9px', color: '#555', marginTop: '1px' }}>
+                      <p style={{ fontSize: '12px', color: '#555', marginTop: '1px' }}>
                         • {edu.degree}{edu.field ? ` of ${edu.field}` : ''}
                       </p>
                     )}
@@ -188,7 +199,7 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
               <SectionTitle title="Skills" />
               <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
                 {skills.map((skill) => (
-                  <div key={skill.id} style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '9px', color: '#444' }}>
+                  <div key={skill.id} style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#444' }}>
                     <span style={{ color: '#888', flexShrink: 0 }}>•</span>
                     <span>{skill.name}</span>
                   </div>
@@ -203,7 +214,7 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
               <SectionTitle title="Languages" />
               <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
                 {languages.map((lang) => (
-                  <div key={lang.id} style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '9px', color: '#444' }}>
+                  <div key={lang.id} style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#444' }}>
                     <span style={{ color: '#888', flexShrink: 0 }}>•</span>
                     <span>{lang.name}</span>
                   </div>
@@ -219,8 +230,8 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 {certificates.map((cert) => (
                   <div key={cert.id}>
-                    <p style={{ fontSize: '9px', fontWeight: '700', color: '#1a1a1a', lineHeight: '1.3' }}>{cert.name}</p>
-                    <p style={{ fontSize: '8px', color: '#888' }}>{cert.issuer}{cert.date ? ` · ${formatDate(cert.date)}` : ''}</p>
+                    <p style={{ fontSize: '14px', fontWeight: '700', color: '#1a1a1a', lineHeight: '1.3' }}>{cert.name}</p>
+                    <p style={{ fontSize: '12px', color: '#888' }}>{cert.issuer}{cert.date ? ` · ${formatDate(cert.date)}` : ''}</p>
                   </div>
                 ))}
               </div>
@@ -229,7 +240,7 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
         </div>
 
         {/* ── RIGHT COLUMN ── */}
-        <div style={{
+        <div className="two-col-right" style={{
           width: '64%',
           padding: '24px 20px 24px 18px',
           display: 'flex',
@@ -243,7 +254,7 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
               <SectionTitle title="Profile" />
               <div
                 data-html
-                style={{ fontSize: '9px', lineHeight: '1.65', color: '#444' }}
+                style={{ fontSize: '12px', lineHeight: '1.65', color: '#444' }}
                 dangerouslySetInnerHTML={{ __html: personalInfo.summary }}
               />
             </div>
@@ -261,13 +272,13 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
                         width: '6px', height: '6px', borderRadius: '50%',
                         backgroundColor: '#1a1a1a', display: 'inline-block', flexShrink: 0,
                       }} />
-                      <span style={{ fontSize: '8px', color: '#888', fontFamily: '"Lato", sans-serif' }}>
+                      <span style={{ fontSize: '12px', color: '#888', fontFamily: '"Lato", sans-serif' }}>
                         {formatDate(exp.startDate)} – {exp.current ? 'Present' : formatDate(exp.endDate)}
                         {exp.company ? `  ·  ${exp.company}${exp.location ? `, ${exp.location}` : ''}` : ''}
                       </span>
                     </div>
                     <p style={{
-                      fontSize: '10px', fontWeight: '700', color: '#1a1a1a',
+                      fontSize: '14px', fontWeight: '700', color: '#1a1a1a',
                       marginLeft: '12px', marginBottom: '3px',
                       fontFamily: '"Lato", sans-serif', letterSpacing: '0.02em',
                     }}>
@@ -276,7 +287,7 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
                     {exp.description && (
                       <div
                         data-html
-                        style={{ fontSize: '9px', lineHeight: '1.6', color: '#444', marginLeft: '12px' }}
+                        style={{ fontSize: '12px', lineHeight: '1.6', color: '#444', marginLeft: '12px' }}
                         dangerouslySetInnerHTML={{ __html: exp.description }}
                       />
                     )}
@@ -294,12 +305,12 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
                 {projects.map((proj) => (
                   <div key={proj.id}>
                     <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '6px', marginBottom: '2px' }}>
-                      <p style={{ fontSize: '10px', fontWeight: '700', color: '#1a1a1a', fontFamily: '"Lato", sans-serif' }}>
+                      <p style={{ fontSize: '14px', fontWeight: '700', color: '#1a1a1a', fontFamily: '"Lato", sans-serif' }}>
                         {proj.name}
                       </p>
                       {proj.githubUrl && (
                         <a href={toSafeUrl(proj.githubUrl)} target="_blank" rel="noopener noreferrer"
-                          style={{ fontSize: '8px', color: '#888', flexShrink: 0 }}>
+                          style={{ fontSize: '12px', color: '#888', flexShrink: 0 }}>
                           {toDisplayUrl(proj.githubUrl)}
                         </a>
                       )}
@@ -307,7 +318,7 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
                     {proj.description && (
                       <div
                         data-html
-                        style={{ fontSize: '9px', lineHeight: '1.6', color: '#444' }}
+                        style={{ fontSize: '12px', lineHeight: '1.6', color: '#444' }}
                         dangerouslySetInnerHTML={{ __html: proj.description }}
                       />
                     )}
@@ -324,14 +335,14 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                 {data.references.map((ref) => (
                   <div key={ref.id}>
-                    <p style={{ fontSize: '10px', fontWeight: '700', color: '#1a1a1a', fontFamily: '"Lato", sans-serif' }}>
+                    <p style={{ fontSize: '14px', fontWeight: '700', color: '#1a1a1a', fontFamily: '"Lato", sans-serif' }}>
                       {ref.name}
                     </p>
-                    <p style={{ fontSize: '9px', color: '#555' }}>
+                    <p style={{ fontSize: '12px', color: '#555' }}>
                       {ref.position}{ref.company ? ` · ${ref.company}` : ''}
                     </p>
-                    {ref.phone && <p style={{ fontSize: '8px', color: '#888' }}>Phone: {ref.phone}</p>}
-                    {ref.email && <p style={{ fontSize: '8px', color: '#888' }}>Email: {ref.email}</p>}
+                    {ref.phone && <p style={{ fontSize: '12px', color: '#888' }}>Phone: {ref.phone}</p>}
+                    {ref.email && <p style={{ fontSize: '12px', color: '#888' }}>Email: {ref.email}</p>}
                   </div>
                 ))}
               </div>
