@@ -5,8 +5,8 @@ export function middleware(req: NextRequest) {
     const isLoggedIn = req.cookies.get("auth")?.value
     const pathname = req.nextUrl.pathname
 
-    // Protect dashboard and chatbox routes
-    const protectedRoutes = ["/dashboard", "/chatbox"]
+    // Protect dashboard routes
+    const protectedRoutes = ["/dashboard"]
     const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route))
 
     if (isProtectedRoute && !isLoggedIn) {
@@ -25,5 +25,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-    matcher: ["/dashboard/:path*", "/chatbox/:path*", "/login", "/signup"],
+    matcher: ["/dashboard/:path*", "/login", "/signup"],
 }

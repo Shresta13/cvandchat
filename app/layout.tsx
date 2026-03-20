@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { ChatButton } from "@/app/components/chat-button";
 import { ConvexClientProvider } from "@/app/components/ConvesClientProvider";
 
 const geistSans = Geist({
@@ -32,7 +31,6 @@ export default function RootLayout({
       >
         <ConvexClientProvider>
           {children}
-          <ChatButton />
         </ConvexClientProvider>
       </body>
     </html>

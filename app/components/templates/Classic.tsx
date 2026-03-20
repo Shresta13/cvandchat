@@ -62,7 +62,7 @@ export default function ClassicTemplate({ data }: ClassicTemplateProps) {
             </a>
           )}
           {data.personalInfo.github && (
-            <a
+            <a 
               href={toSafeUrl(data.personalInfo.github)}
               target="_blank"
               rel="noopener noreferrer"
@@ -159,6 +159,53 @@ export default function ClassicTemplate({ data }: ClassicTemplateProps) {
         </div>
       )}
 
+{/* ✅ Languages — ADD HERE */}
+{data.languages?.length > 0 && (
+  <div className="mb-3">
+    <h2 className="text-sm font-bold text-gray-800 mb-3 uppercase tracking-widest border-b border-gray-300 pb-1">
+      Languages
+    </h2>
+    <ul className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-1">
+      {data.languages.map((lang) => (
+        <li key={lang.id} className="flex items-center gap-2 text-xs text-gray-600">
+          <span className="w-1.5 h-1.5 rounded-full bg-gray-400" />
+          {lang.name}
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
+
+{/* ✅ Certificates — ADD HERE */}
+{data.certificates?.length > 0 && (
+  <div className="mb-3">
+    <h2 className="text-sm font-bold text-gray-800 mb-3 uppercase tracking-widest border-b border-gray-300 pb-1">
+      Certifications
+    </h2>
+    <div className="space-y-2">
+      {data.certificates.map((cert) => (
+        <div key={cert.id} className="flex flex-wrap justify-between items-start gap-1">
+          <div>
+            <p className="text-xs font-bold text-gray-900">{cert.name}</p>
+            <p className="text-xs text-gray-500 italic">
+              {cert.issuer}
+              {cert.credentialId && (
+                <span className="text-gray-400"> · ID: {cert.credentialId}</span>
+              )}
+            </p>
+          </div>
+          {cert.date && (
+            <span className="text-xs text-gray-400 shrink-0">
+              {formatDate(cert.date)}
+            </span>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
+
       {/* Projects */}
       {data.projects?.length > 0 && (
         <div className="mb-3">
@@ -193,6 +240,58 @@ export default function ClassicTemplate({ data }: ClassicTemplateProps) {
           </div>
         </div>
       )}
+
+      {/* References */}
+      {data.references?.length > 0 && (
+        <div className="mb-3">
+          <h2 className="text-sm font-bold text-gray-800 mb-3 uppercase tracking-widest border-b border-gray-300 pb-1">
+            References
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {data.references.map((ref) => (
+              <div key={ref.id}>
+                <p className="font-bold text-gray-900 text-sm">{ref.name}</p>
+                {ref.position && (
+                  <p className="text-xs text-gray-500 italic">
+                    {ref.position}{ref.company ? `, ${ref.company}` : ''}
+                  </p>
+                )}
+                {ref.relationship && (
+                  <p className="text-xs text-gray-400">{ref.relationship}</p>
+                )}
+                <div className="mt-1 space-y-0.5">
+                  {ref.email && (
+                    <div className="flex items-center gap-1 text-xs text-gray-600">
+                      <Mail size={11} />
+                      <a href={`mailto:${ref.email}`} className="hover:text-gray-900">{ref.email}</a>
+                    </div>
+                  )}
+                  {ref.phone && (
+                    <div className="flex items-center gap-1 text-xs text-gray-600">
+                      <Phone size={11} />
+                      <span>{ref.phone}</span>
+                    </div>
+                  )}
+                  {ref.linkedin && (
+                    <div className="flex items-center gap-1 text-xs text-gray-600">
+                      <Linkedin size={11} />
+                      <a
+                        href={toSafeUrl(ref.linkedin)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:text-gray-900"
+                      >
+                        {toDisplayUrl(ref.linkedin)}
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
