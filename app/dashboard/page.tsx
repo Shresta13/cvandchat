@@ -6,13 +6,16 @@ import { redirect } from "next/navigation"
 
 export default async function Page() {
   let user = null
+
   try {
     user = await getCurrentUser()
   } catch (err) {
     console.error("Dashboard: getCurrentUser failed", err)
   }
 
-  if (!user) redirect("/login")
+  if (!user) {
+    redirect("/login")
+  }
 
   const sidebarUser = {
     name:   user!.name  ?? "User",

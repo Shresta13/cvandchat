@@ -1,0 +1,112 @@
+{
+  "personalInfo": {
+    "fullName": "shsresta  Morgan changed",
+    "email": "alex.morgan@example.com",
+    "phone": "+1-555-0123",
+    "location": "Austin, Texas",
+    "title": "Full Stack Developer",
+    "linkedin": "https://linkedin.com/in/alexmorgan",
+    "github": "https://github.com/alexmorgan-dev",
+    "summary": "<p>Results-driven developer with 4+ years of experience building scalable web applications. Strong in React, Next.js, Node.js, and modern cloud deployment workflows.</p>"
+  },
+  "education": [
+    {
+      "id": "edu_001",
+      "institution": "University of Texas at Austin",
+      "degree": "Bachelor of Science",
+      "field": "Software Engineering",
+      "startDate": "2017-08-01T00:00:00.000Z",
+      "endDate": "2021-05-01T00:00:00.000Z",
+      "current": false
+    },
+    {
+      "id": "edu_002",
+      "institution": "Riverside Community College",
+      "degree": "Associate Degree",
+      "field": "Computer Information Systems",
+      "startDate": "2015-08-01T00:00:00.000Z",
+      "endDate": "2017-05-01T00:00:00.000Z",
+      "current": false
+    }
+  ],
+  "experience": [
+    {
+      "id": "exp_001",
+      "company": "BlueWave Labs",
+      "position": "Senior Full Stack Developer",
+      "location": "Austin, TX",
+      "startDate": "2023-02-01T00:00:00.000Z",
+      "endDate": "",
+      "current": true,
+      "description": "<ul><li>Led migration from monolith to service-oriented architecture for a SaaS platform</li><li>Improved API response performance by 35% using caching and query optimization</li><li>Mentored 3 junior developers and established code review standards</li></ul>"
+    },
+    {
+      "id": "exp_002",
+      "company": "PixelForge Studio",
+      "position": "Frontend Developer",
+      "location": "Remote",
+      "startDate": "2021-06-01T00:00:00.000Z",
+      "endDate": "2023-01-01T00:00:00.000Z",
+      "current": false,
+      "description": "<ul><li>Built responsive UI components with React and TypeScript for client-facing products</li><li>Raised Lighthouse performance score from 68 to 95 across key landing pages</li></ul>"
+    }
+  ],
+  "skills": [
+    { "id": "sk_001", "name": "React" },
+    { "id": "sk_002", "name": "Next.js" },
+    { "id": "sk_003", "name": "TypeScript" },
+    { "id": "sk_004", "name": "Node.js" },
+    { "id": "sk_005", "name": "PostgreSQL" },
+    { "id": "sk_006", "name": "Redis" },
+    { "id": "sk_007", "name": "Docker" },
+    { "id": "sk_008", "name": "Azure" }
+  ],
+  "languages": [
+    { "id": "lang_001", "name": "English (Native)" },
+    { "id": "lang_002", "name": "Spanish (Professional)" },
+    { "id": "lang_003", "name": "German (Basic)" }
+  ],
+  "certificates": [
+    {
+      "id": "cert_001",
+      "name": "Microsoft Certified: Azure Developer Associate",
+      "issuer": "Microsoft",
+      "date": "2024-04-01T00:00:00.000Z",
+      "credentialId": "AZ-204-2024-1182"
+    },
+    {
+      "id": "cert_002",
+      "name": "AWS Certified Developer - Associate",
+      "issuer": "Amazon Web Services",
+      "date": "2023-09-01T00:00:00.000Z",
+      "credentialId": "AWS-DVA-2023-7741"
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj_001",
+      "name": "SmartResume Pro",
+      "description": "<ul><li>Developed a resume builder using Next.js and Convex with live preview support</li><li>Created multiple ATS-friendly templates and PDF export workflow</li></ul>",
+      "githubUrl": "https://github.com/alexmorgan-dev/smartresume-pro"
+    },
+    {
+      "id": "proj_002",
+      "name": "MultiVendor Commerce",
+      "description": "<ul><li>Built a multi-vendor e-commerce platform with role-based dashboards</li><li>Integrated Stripe payments and order tracking with webhook processing</li></ul>",
+      "githubUrl": "https://github.com/alexmorgan-dev/multivendor-commerce"
+    }
+  ],
+  "references": [
+    {
+      "id": "ref_001",
+      "name": "Jordan Patel",
+      "position": "Engineering Manager",
+      "company": "BlueWave Labs",
+      "email": "jordan.patel@bluewavelabs.com",
+      "phone": "+1-555-0456",
+      "relationship": "Direct Manager",
+      "linkedin": "https://linkedin.com/in/jordanpatel"
+    }
+  ],
+  "selectedTemplate": "classic"
+}
