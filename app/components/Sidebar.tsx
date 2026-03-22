@@ -14,7 +14,6 @@ interface SidebarProps {
 export default function Sidebar({ currentStep, steps }: SidebarProps) {
   const { resumeData } = useResume();
 
-  // ✅ Check if each step has actual data filled
   const isStepFilled = (stepNumber: number): boolean => {
     switch (stepNumber) {
       case 1:
@@ -43,6 +42,12 @@ export default function Sidebar({ currentStep, steps }: SidebarProps) {
           resumeData.certificates.length > 0 &&
           resumeData.certificates.every((c) => c.name && c.issuer)
         );
+      // ✅ ADDED — was missing, causing orange circle
+      case 7:
+        return resumeData.projects.length > 0;
+      // ✅ ADDED — was missing, causing orange circle
+      case 8:
+        return resumeData.references.length > 0;
       default:
         return false;
     }
@@ -59,8 +64,8 @@ export default function Sidebar({ currentStep, steps }: SidebarProps) {
           {steps.map((step, index) => {
             const passed      = currentStep > step.number;
             const filled      = isStepFilled(step.number);
-            const isCompleted = passed && filled;   // ✅ green tick only if filled
-            const isSkipped   = passed && !filled;  // ⚠️ orange if skipped empty
+            const isCompleted = passed && filled;
+            const isSkipped   = passed && !filled;
             const isCurrent   = currentStep === step.number;
 
             return (

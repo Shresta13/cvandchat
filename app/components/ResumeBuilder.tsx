@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, FileText, Eye } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Eye } from 'lucide-react';
 import Sidebar from './Sidebar';
 import ResumePreview from './ResumePreview';
 import PersonalInfoStep from './steps/PersonalInfoStep';
@@ -13,6 +13,7 @@ import ReferencesStep from './steps/Reference';
 import LanguageStep from './steps/Language';
 import CertificatesStep from './steps/CertificatesStep';
 import { useResume } from './context/ResumeContext';
+import { toast, Toaster } from 'sonner'; // ✅ import both
 
 const brand = {
   primary: '#00273D',
@@ -59,12 +60,22 @@ export default function ResumeBuilder() {
     if (validateStep(currentStep)) {
       if (currentStep < steps.length) setCurrentStep(currentStep + 1);
     } else {
-      alert('Please fill in all required fields before proceeding.');
+      toast.error('Please fill in all required fields before proceeding.', {
+        duration: 3000,
+      });
     }
   };
 
   const handlePrevious = () => {
     if (currentStep > 1) setCurrentStep(currentStep - 1);
+  };
+
+  // ✅ complete handler with toast
+  const handleComplete = () => {
+    toast.success('Resume completed!', {
+      description: 'You can now download your resume from the preview panel.',
+      duration: 4000,
+    });
   };
 
   if (!isHydrated) return null;
@@ -74,9 +85,12 @@ export default function ResumeBuilder() {
       className="flex h-[calc(100vh-4rem)] flex-col bg-gray-50"
       style={{ fontFamily: "'DM Sans', sans-serif" }}
     >
+      {/* ✅ Toaster must be inside the component tree */}
+      <Toaster position="bottom-right" richColors />
+
       <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap');`}</style>
 
-      {/* ── Top bar — visible on ALL screens ── */}
+      {/* Top bar */}
       <div className="flex items-center justify-between border-b border-gray-200 bg-white px-4 py-3">
         <div className="min-w-0">
           <p className="text-xs font-semibold uppercase tracking-widest text-gray-400">
@@ -87,7 +101,7 @@ export default function ResumeBuilder() {
           </p>
         </div>
 
-        {/* Form / Preview toggle — visible on ALL screens */}
+        {/* Form / Preview toggle */}
         <div className="flex rounded-lg border border-gray-200 bg-gray-50 p-0.5">
           <button
             onClick={() => setMobileView('form')}
@@ -115,10 +129,10 @@ export default function ResumeBuilder() {
         </div>
       </div>
 
-      {/* ── Main layout ── */}
+      {/* Main layout */}
       <div className="flex flex-1 overflow-hidden">
 
-        {/* Sidebar — hidden on mobile, visible on lg+ */}
+        {/* Sidebar */}
         <div className="hidden lg:block">
           <Sidebar currentStep={currentStep} steps={steps} />
         </div>
@@ -127,8 +141,8 @@ export default function ResumeBuilder() {
         <div
           className={`flex flex-col ${
             mobileView === 'preview'
-              ? 'hidden'                          // hidden when preview active
-              : 'flex flex-1 lg:flex-1 lg:max-w-[50%]' // show on form view
+              ? 'hidden'
+              : 'flex flex-1 lg:flex-1 lg:max-w-[50%]'
           }`}
         >
           {/* Scrollable form area */}
@@ -182,26 +196,27 @@ export default function ResumeBuilder() {
                   <ChevronRight size={16} />
                 </button>
               ) : (
+                // ✅ FIXED complete button — no more export inside JSX
                 <button
-                  onClick={() => alert('Resume completed! You can now download it.')}
-                  className="rounded-lg px-4 py-2 text-sm font-medium text-white transition-all hover:shadow-md active:scale-95"
+                  onClick={handleComplete}
+                  className="flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium text-white transition-all hover:shadow-md active:scale-95"
                   style={{ backgroundColor: brand.primary }}
                   onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = brand.primaryDark)}
                   onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = brand.primary)}
                 >
-                  Complete ✓
+                  Complete
                 </button>
               )}
             </div>
           </div>
         </div>
 
-        {/* ✅ Preview panel — always visible on lg+, toggle on mobile/tablet */}
+        {/* Preview panel */}
         <div
           className={`overflow-hidden border-l border-gray-200 ${
             mobileView === 'preview'
-              ? 'flex flex-1'           // full width when preview toggled
-              : 'hidden lg:flex lg:flex-1' // hidden on mobile form view, always show on lg+
+              ? 'flex flex-1'
+              : 'hidden lg:flex lg:flex-1'
           }`}
         >
           <ResumePreview />

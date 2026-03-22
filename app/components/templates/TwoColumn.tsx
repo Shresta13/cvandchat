@@ -36,6 +36,7 @@ const SectionTitle = ({ title }: { title: string }) => (
       borderBottom: '1.5px solid #1a1a1a',
       paddingBottom: '2px',
       display: 'block',
+      margin: 0,
     }}>
       {title}
     </h2>
@@ -47,12 +48,14 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
 
   return (
     <div
-      className="bg-white w-full"
+      className="bg-white w-full two-col-template"
       style={{
         minHeight: '297mm',
         fontFamily: '"Libre Baskerville", Georgia, serif',
         fontSize: '12px',
         color: '#1a1a1a',
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
       <style>{`
@@ -72,19 +75,36 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
           content: none !important;
         }
         @media (max-width: 768px) {
-          .two-col-template {
+          .two-col-layout {
             flex-direction: column !important;
           }
-          .two-col-left,
-          .two-col-right {
+          .two-col-left {
             width: 100% !important;
             border-right: none !important;
+            border-bottom: 1px solid #e0e0e0 !important;
             padding: 16px !important;
+          }
+          .two-col-right {
+            width: 100% !important;
+            padding: 16px !important;
+          }
+          .two-col-name {
+            font-size: 22px !important;
+          }
+          .two-col-name span {
+            display: inline !important;
+          }
+          .two-col-refs-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .two-col-footer {
+            padding: 10px 16px !important;
           }
         }
       `}</style>
 
-      <div className="two-col-template" style={{ display: 'flex', minHeight: '297mm' }}>
+      {/* MAIN LAYOUT */}
+      <div className="two-col-layout" style={{ display: 'flex', flex: 1 }}>
 
         {/* ── LEFT COLUMN ── */}
         <div className="two-col-left" style={{
@@ -94,20 +114,25 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
           display: 'flex',
           flexDirection: 'column',
           gap: '0',
+          boxSizing: 'border-box',
         }}>
 
           {/* Name block */}
           <div style={{ marginBottom: '14px' }}>
-            <h1 style={{
-              fontFamily: '"Lato", sans-serif',
-              fontSize: '30px',
-              fontWeight: '700',
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase' as const,
-              lineHeight: '1.1',
-              color: '#1a1a1a',
-              marginBottom: '4px',
-            }}>
+            <h1
+              className="two-col-name"
+              style={{
+                fontFamily: '"Lato", sans-serif',
+                fontSize: '30px',
+                fontWeight: '700',
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase' as const,
+                lineHeight: '1.1',
+                color: '#1a1a1a',
+                marginBottom: '4px',
+                marginTop: 0,
+              }}
+            >
               {personalInfo.fullName ? (
                 personalInfo.fullName.split(' ').map((word, i) => (
                   <span key={i} style={{ display: 'block' }}>{word}</span>
@@ -125,6 +150,7 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
                 textTransform: 'uppercase' as const,
                 color: '#666',
                 marginTop: '4px',
+                marginBottom: 0,
               }}>
                 {personalInfo.title}
               </p>
@@ -154,7 +180,8 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
             {personalInfo.linkedin && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#555', fontSize: '12px' }}>
                 <Linkedin size={9} style={{ flexShrink: 0 }} />
-                <a href={toSafeUrl(personalInfo.linkedin)} target="_blank" rel="noopener noreferrer" style={{ color: '#555', wordBreak: 'break-all' }}>
+                <a href={toSafeUrl(personalInfo.linkedin)} target="_blank" rel="noopener noreferrer"
+                  style={{ color: '#555', wordBreak: 'break-all' }}>
                   {toDisplayUrl(personalInfo.linkedin)}
                 </a>
               </div>
@@ -162,7 +189,8 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
             {personalInfo.github && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#555', fontSize: '12px' }}>
                 <Github size={9} style={{ flexShrink: 0 }} />
-                <a href={toSafeUrl(personalInfo.github)} target="_blank" rel="noopener noreferrer" style={{ color: '#555', wordBreak: 'break-all' }}>
+                <a href={toSafeUrl(personalInfo.github)} target="_blank" rel="noopener noreferrer"
+                  style={{ color: '#555', wordBreak: 'break-all' }}>
                   {toDisplayUrl(personalInfo.github)}
                 </a>
               </div>
@@ -176,14 +204,14 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {education.map((edu) => (
                   <div key={edu.id}>
-                    <p style={{ fontSize: '12px', color: '#888', fontFamily: '"Lato", sans-serif', letterSpacing: '0.04em' }}>
+                    <p style={{ fontSize: '12px', color: '#888', fontFamily: '"Lato", sans-serif', letterSpacing: '0.04em', margin: '0 0 2px' }}>
                       {formatDateShort(edu.startDate)}{edu.endDate || edu.current ? ` – ${edu.current ? 'Present' : formatDateShort(edu.endDate)}` : ''}
                     </p>
-                    <p style={{ fontSize: '14px', fontWeight: '700', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginTop: '2px', fontFamily: '"Lato", sans-serif', lineHeight: '1.3' }}>
+                    <p style={{ fontSize: '14px', fontWeight: '700', textTransform: 'uppercase' as const, letterSpacing: '0.05em', margin: '2px 0 1px', fontFamily: '"Lato", sans-serif', lineHeight: '1.3' }}>
                       {edu.institution}
                     </p>
                     {edu.degree && (
-                      <p style={{ fontSize: '12px', color: '#555', marginTop: '1px' }}>
+                      <p style={{ fontSize: '12px', color: '#555', margin: 0 }}>
                         • {edu.degree}{edu.field ? ` of ${edu.field}` : ''}
                       </p>
                     )}
@@ -230,8 +258,8 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 {certificates.map((cert) => (
                   <div key={cert.id}>
-                    <p style={{ fontSize: '14px', fontWeight: '700', color: '#1a1a1a', lineHeight: '1.3' }}>{cert.name}</p>
-                    <p style={{ fontSize: '12px', color: '#888' }}>{cert.issuer}{cert.date ? ` · ${formatDate(cert.date)}` : ''}</p>
+                    <p style={{ fontSize: '14px', fontWeight: '700', color: '#1a1a1a', lineHeight: '1.3', margin: '0 0 1px' }}>{cert.name}</p>
+                    <p style={{ fontSize: '12px', color: '#888', margin: 0 }}>{cert.issuer}{cert.date ? ` · ${formatDate(cert.date)}` : ''}</p>
                   </div>
                 ))}
               </div>
@@ -246,6 +274,7 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
           display: 'flex',
           flexDirection: 'column',
           gap: '0',
+          boxSizing: 'border-box',
         }}>
 
           {/* Profile / Summary */}
@@ -267,7 +296,7 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {experience.map((exp) => (
                   <div key={exp.id}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px', flexWrap: 'wrap' }}>
                       <span style={{
                         width: '6px', height: '6px', borderRadius: '50%',
                         backgroundColor: '#1a1a1a', display: 'inline-block', flexShrink: 0,
@@ -279,7 +308,7 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
                     </div>
                     <p style={{
                       fontSize: '14px', fontWeight: '700', color: '#1a1a1a',
-                      marginLeft: '12px', marginBottom: '3px',
+                      marginLeft: '12px', marginBottom: '3px', marginTop: 0,
                       fontFamily: '"Lato", sans-serif', letterSpacing: '0.02em',
                     }}>
                       {exp.position}
@@ -304,13 +333,13 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {projects.map((proj) => (
                   <div key={proj.id}>
-                    <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '6px', marginBottom: '2px' }}>
-                      <p style={{ fontSize: '14px', fontWeight: '700', color: '#1a1a1a', fontFamily: '"Lato", sans-serif' }}>
+                    <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '6px', marginBottom: '2px', flexWrap: 'wrap' }}>
+                      <p style={{ fontSize: '14px', fontWeight: '700', color: '#1a1a1a', fontFamily: '"Lato", sans-serif', margin: 0 }}>
                         {proj.name}
                       </p>
                       {proj.githubUrl && (
                         <a href={toSafeUrl(proj.githubUrl)} target="_blank" rel="noopener noreferrer"
-                          style={{ fontSize: '12px', color: '#888', flexShrink: 0 }}>
+                          style={{ fontSize: '12px', color: '#888', flexShrink: 0, wordBreak: 'break-all' }}>
                           {toDisplayUrl(proj.githubUrl)}
                         </a>
                       )}
@@ -332,22 +361,49 @@ export default function TwoColumnTemplate({ data }: TwoColumnTemplateProps) {
           {data.references && data.references.length > 0 && (
             <div style={{ marginBottom: '14px' }}>
               <SectionTitle title="References" />
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+              <div
+                className="two-col-refs-grid"
+                style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}
+              >
                 {data.references.map((ref) => (
                   <div key={ref.id}>
-                    <p style={{ fontSize: '14px', fontWeight: '700', color: '#1a1a1a', fontFamily: '"Lato", sans-serif' }}>
+                    <p style={{ fontSize: '14px', fontWeight: '700', color: '#1a1a1a', fontFamily: '"Lato", sans-serif', margin: '0 0 2px' }}>
                       {ref.name}
                     </p>
-                    <p style={{ fontSize: '12px', color: '#555' }}>
+                    <p style={{ fontSize: '12px', color: '#555', margin: '0 0 1px' }}>
                       {ref.position}{ref.company ? ` · ${ref.company}` : ''}
                     </p>
-                    {ref.phone && <p style={{ fontSize: '12px', color: '#888' }}>Phone: {ref.phone}</p>}
-                    {ref.email && <p style={{ fontSize: '12px', color: '#888' }}>Email: {ref.email}</p>}
+                    {ref.phone && <p style={{ fontSize: '12px', color: '#888', margin: '0 0 1px' }}>Phone: {ref.phone}</p>}
+                    {ref.email && <p style={{ fontSize: '12px', color: '#888', margin: 0, wordBreak: 'break-all' }}>Email: {ref.email}</p>}
                   </div>
                 ))}
               </div>
             </div>
           )}
+
+          {/* Footer */}
+          <div
+            className="two-col-footer"
+            style={{
+              marginTop: 'auto',
+              paddingTop: '12px',
+              borderTop: '1px solid #e0e0e0',
+              textAlign: 'center',
+            }}
+          >
+            <p style={{ fontSize: '11px', color: '#aaa', margin: 0 }}>
+              Generated by{' '}
+              <a
+               href="https://kaamhubs.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: '#aaa', textDecoration: 'underline' }}
+              >
+                kaamhubs.com
+              </a>
+            </p>
+          </div>
+
         </div>
       </div>
     </div>

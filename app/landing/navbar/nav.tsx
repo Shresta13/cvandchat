@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image"; // ✅ fixed: was `image` (lowercase)
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 
@@ -25,13 +26,15 @@ export default function Navbar() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
 
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 group">
-          <div className="w-9 h-9 bg-gradient-to-br from-[#00273D] to-[#00273D] rounded-xl flex items-center justify-center">
-            <span className="text-white font-bold text-base">T</span>
-          </div>
-          <span className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-            TaskMaster
-          </span>
+        <Link href="/" className="flex items-center group">
+          <Image
+            src="/logo_final.webp"  // ✅ fixed: was ./logo_final.webp
+            alt="KaamHubs Logo"
+            width={160}
+            height={44}
+            className="h-10 w-auto object-contain group-hover:opacity-90 transition-opacity"
+            priority
+          />
         </Link>
 
         {/* Desktop Links */}
